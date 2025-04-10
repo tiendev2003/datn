@@ -4,6 +4,11 @@
 
 Hệ thống đặt lịch và quản lý phòng gym là một nền tảng trực tuyến giúp người dùng đặt lịch sử dụng dịch vụ gym, đồng thời cung cấp các công cụ quản lý cho nhân viên, huấn luyện viên và quản lý. Hệ thống hướng đến việc tối ưu hóa trải nghiệm người dùng, tăng hiệu quả quản lý và vận hành phòng gym.
 
+## Mục Tiêu Tổng Thể
+
+Dự án hướng đến việc xây dựng một hệ thống quản lý toàn diện cho phòng gym với các mục tiêu cụ thể sau:
+ 
+
 ## Đặc Điểm Hệ Thống
 
 - **Không bán hàng**: Hệ thống tập trung vào việc đặt lịch và quản lý, không có tính năng bán hàng trực tuyến.
