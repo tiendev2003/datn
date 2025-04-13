@@ -176,37 +176,26 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 ## Kiến Trúc Hệ Thống
 
 ### Kiến Trúc Tổng Thể
-- Kiến trúc Microservice
-- API Gateway cho điều phối request
-- Service Discovery và Configuration Management
-- Event-driven communication giữa các service
-- REST API cho giao tiếp giữa client và server
-- Cơ sở dữ liệu phân tán (mỗi microservice có DB riêng)
+- Kiến trúc MVC (Model-View-Controller)
+- Ứng dụng monolithic với các module phân chia rõ ràng
+- RESTful API cho giao tiếp với front-end
+- Cơ sở dữ liệu tập trung (shared database)
+- Caching tầng ứng dụng và database
 
-### Microservices
-- **Authentication Service**: Quản lý xác thực, đăng nhập, đăng ký
-- **User Service**: Quản lý thông tin người dùng, phân quyền
-- **Booking Service**: Xử lý đặt lịch, quản lý lịch hẹn
-- **Trainer Service**: Quản lý huấn luyện viên và lịch dạy
-- **Notification Service**: Gửi thông báo qua email, SMS, push notification
-- **Analytics Service**: Xử lý báo cáo và phân tích dữ liệu
-- **Equipment Service**: Quản lý thiết bị và cơ sở vật chất
-- **Class Management Service**: Quản lý lớp tập nhóm
 
 ### Công Nghệ Đề Xuất
-- **Front-end**: Reactjs
-- **Back-end**: Spring Boot, Spring Cloud
-- **API Gateway**: Spring Cloud Gateway
-- **Service Discovery**: Eureka/Consul
-- **Message Broker**: Kafka/RabbitMQ
+- **Front-end**: ReactJS  
+- **Back-end**: Spring Boot với Spring MVC
 - **Database**: 
-  - SQL: MySQL/PostgreSQL cho dữ liệu có cấu trúc
-  - NoSQL: MongoDB cho dữ liệu linh hoạt
-- **Caching**: Redis
-- **Authentication**: JWT, OAuth2
-- **Notification**: WebSocket, Firebase Cloud Messaging
-- **Deployment**: Docker, Kubernetes, AWS/Azure/Google Cloud
-- **Monitoring**: Prometheus, Grafana, ELK Stack
+  - MySQL cho toàn bộ dữ liệu
+  - Thiết kế schema tối ưu với indexes và constraints
+- **Caching**: Hibernate Second-level cache + Redis
+- **Authentication**: Spring Security với JWT
+- **Notification**: WebSocket, SMTP (Email), SMS Gateway
+- **Deployment**: Tomcat/Jetty server, Docker
+- **Monitoring**: Spring Actuator, Prometheus, Grafana
+- **Background Jobs**: Spring Batch, Spring Scheduler
+- **Testing**: JUnit, Mockito, Spring Test
 
 ## Kế Hoạch Triển Khai
 
