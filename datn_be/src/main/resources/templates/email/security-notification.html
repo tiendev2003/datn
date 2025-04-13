@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông Báo Bảo Mật</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #0066cc;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 1px solid #dddddd;
+            border-right: 1px solid #dddddd;
+        }
+        .alert-box {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #666666;
+            border: 1px solid #dddddd;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #0066cc;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Thông Báo Bảo Mật</h1>
+    </div>
+    <div class="content">
+        <p>Xin chào <strong th:text="${name}">Tên Người Dùng</strong>,</p>
+        
+        <div class="alert-box">
+            <p th:text="${notificationText}">Nội dung thông báo bảo mật sẽ xuất hiện ở đây.</p>
+            <p>Thời gian: <span th:text="${currentTime}">Thời gian hiện tại</span></p>
+        </div>
+        
+        <p>Nếu bạn không thực hiện hành động này, vui lòng liên hệ bộ phận hỗ trợ ngay lập tức để bảo vệ tài khoản của bạn.</p>
+        
+        <p>
+            <a class="button" href="#">Liên Hệ Hỗ Trợ</a>
+        </p>
+        
+        <p>Trân trọng,</p>
+        <p>Đội ngũ <span th:text="${appName}">Ứng Dụng</span></p>
+    </div>
+    <div class="footer">
+        <p>Email này được gửi tự động, vui lòng không trả lời. Nếu bạn cần hỗ trợ, vui lòng liên hệ qua trang hỗ trợ của chúng tôi.</p>
+        <p>&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> <span th:text="${appName}">Ứng Dụng</span>. Tất cả các quyền được bảo lưu.</p>
+    </div>
+</body>
+</html>

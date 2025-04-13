@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng Nhập Mới Vào Tài Khoản</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #d32f2f;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 1px solid #dddddd;
+            border-right: 1px solid #dddddd;
+        }
+        .alert-box {
+            background-color: #feeeee;
+            border-left: 4px solid #d32f2f;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .detail-box {
+            background-color: #f5f5f5;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .detail-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .detail-label {
+            width: 150px;
+            font-weight: bold;
+        }
+        .detail-value {
+            flex: 1;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #666666;
+            border: 1px solid #dddddd;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #d32f2f;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Đăng Nhập Mới Vào Tài Khoản</h1>
+    </div>
+    <div class="content">
+        <p>Xin chào <strong th:text="${name}">Tên Người Dùng</strong>,</p>
+        
+        <div class="alert-box">
+            <p><strong>Chúng tôi phát hiện một đăng nhập mới vào tài khoản của bạn.</strong></p>
+            <p>Nếu đây là bạn, bạn có thể bỏ qua email này.</p>
+            <p>Nếu đây không phải là bạn, vui lòng thay đổi mật khẩu ngay lập tức và bật xác thực hai yếu tố để bảo vệ tài khoản của bạn.</p>
+        </div>
+        
+        <div class="detail-box">
+            <h3>Chi tiết đăng nhập:</h3>
+            <div class="detail-row">
+                <div class="detail-label">Thời gian:</div>
+                <div class="detail-value" th:text="${loginTime}">01/01/2025 12:00:00</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Địa chỉ IP:</div>
+                <div class="detail-value" th:text="${ipAddress}">192.168.1.1</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Vị trí:</div>
+                <div class="detail-value" th:text="${location}">Hà Nội, Việt Nam</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Thiết bị:</div>
+                <div class="detail-value" th:text="${deviceInfo}">Chrome trên Windows (Máy tính)</div>
+            </div>
+        </div>
+        
+        <p>Nếu bạn không nhận ra hoạt động này, vui lòng:</p>
+        <ol>
+            <li>Thay đổi mật khẩu của bạn ngay lập tức</li>
+            <li>Bật xác thực hai yếu tố nếu chưa làm</li>
+            <li>Liên hệ với bộ phận hỗ trợ của chúng tôi</li>
+        </ol>
+        
+        <p>
+            <a class="button" href="#">Kiểm Tra Hoạt Động Tài Khoản</a>
+        </p>
+        
+        <p>Trân trọng,</p>
+        <p>Đội ngũ <span th:text="${appName}">Ứng Dụng</span></p>
+    </div>
+    <div class="footer">
+        <p>Email này được gửi tự động, vui lòng không trả lời. Nếu bạn cần hỗ trợ, vui lòng liên hệ qua trang hỗ trợ của chúng tôi.</p>
+        <p>&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> <span th:text="${appName}">Ứng Dụng</span>. Tất cả các quyền được bảo lưu.</p>
+    </div>
+</body>
+</html>

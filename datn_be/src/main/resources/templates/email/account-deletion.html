@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xác Nhận Xóa Tài Khoản</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #607D8B;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 1px solid #dddddd;
+            border-right: 1px solid #dddddd;
+        }
+        .info-box {
+            background-color: #e8f4f8;
+            border-left: 4px solid #607D8B;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #666666;
+            border: 1px solid #dddddd;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Xác Nhận Xóa Tài Khoản</h1>
+    </div>
+    <div class="content">
+        <p>Xin chào <strong th:text="${name}">Tên Người Dùng</strong>,</p>
+        
+        <p>Theo yêu cầu của bạn, tài khoản của bạn tại <span th:text="${appName}">Ứng Dụng</span> đã được xóa vĩnh viễn khỏi hệ thống của chúng tôi.</p>
+        
+        <div class="info-box">
+            <p><strong>Thời gian xóa tài khoản:</strong> <span th:text="${deletionTime}">01/01/2025 12:00:00</span></p>
+            <p>Tất cả dữ liệu cá nhân liên quan đến tài khoản của bạn đã được xóa khỏi hệ thống của chúng tôi theo chính sách bảo mật.</p>
+        </div>
+        
+        <p>Nếu bạn không yêu cầu xóa tài khoản này, vui lòng liên hệ với chúng tôi ngay lập tức qua email hỗ trợ hoặc qua hotline.</p>
+        
+        <p>Chúng tôi rất tiếc khi thấy bạn rời đi và đánh giá cao mọi phản hồi về trải nghiệm của bạn với dịch vụ của chúng tôi để chúng tôi có thể cải thiện.</p>
+        
+        <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>
+        
+        <p>Trân trọng,</p>
+        <p>Đội ngũ <span th:text="${appName}">Ứng Dụng</span></p>
+    </div>
+    <div class="footer">
+        <p>Email này được gửi tự động, vui lòng không trả lời. Nếu bạn cần hỗ trợ, vui lòng liên hệ qua trang hỗ trợ của chúng tôi.</p>
+        <p>&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> <span th:text="${appName}">Ứng Dụng</span>. Tất cả các quyền được bảo lưu.</p>
+    </div>
+</body>
+</html>

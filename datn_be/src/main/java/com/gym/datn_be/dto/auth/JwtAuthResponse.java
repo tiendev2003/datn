@@ -21,4 +21,8 @@ public class JwtAuthResponse {
     private String email;
     private String fullName;
     private List<String> roles;
+    
+    // Thêm các trường hỗ trợ xác thực hai yếu tố
+    private boolean require2FA = false;
+    private String temporaryToken;
 }

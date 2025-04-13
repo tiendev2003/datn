@@ -69,6 +69,62 @@ public class JwtTokenProvider {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
     }
+    
+    // Generate temporary token for two-factor authentication
+    public String generateTemporaryToken(Authentication authentication) {
+        User userPrincipal = (User) authentication.getPrincipal();
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + 300000); // 5 minutes
+
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        return Jwts.builder()
+                .setSubject(userPrincipal.getUsername())
+                .claim("authorities", authorities)
+                .claim("type", "temporary")
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS512)
+                .compact();
+    }
+    
+    // Validate temporary token
+    public boolean validateTemporaryToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            
+            // Kiểm tra loại token
+            return "temporary".equals(claims.get("type"));
+        } catch (JwtException | IllegalArgumentException e) {
+            log.error("Invalid temporary JWT token: {}", e.getMessage());
+            return false;
+        }
+    }
+    
+    // Get authentication from temporary token
+    public Authentication getAuthenticationFromTemporaryToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get("authorities").toString().split(","))
+                        .filter(StringUtils::hasText)
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+
+        User principal = new User(claims.getSubject(), "", authorities);
+
+        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    }
 
     // Validate JWT token
     public boolean validateToken(String token) {
@@ -93,6 +149,23 @@ public class JwtTokenProvider {
                 .getBody();
 
         return claims.getSubject();
+    }
+    
+    // Get expiration date from JWT token
+    public Date getExpirationDateFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getExpiration();
+    }
+    
+    // Check if token is expired
+    public boolean isTokenExpired(String token) {
+        Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
     }
 
     // Get authorities from JWT token

@@ -65,6 +65,9 @@ public class User {
 
     @Column(name = "profile_picture")
     private String profilePicture;
+    
+    @Column(name = "profile_image")
+    private String profileImage;
 
     @Column(name = "registration_date", nullable = false)
     private LocalDateTime registrationDate = LocalDateTime.now();
@@ -74,6 +77,9 @@ public class User {
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
+    
+    @Column(name = "is_email_verified", nullable = false)
+    private boolean isEmailVerified = false;
 
     @Column(name = "activation_token")
     private String activationToken;
@@ -89,6 +95,30 @@ public class User {
 
     @Column(name = "two_factor_secret")
     private String twoFactorSecret;
+    
+    @Column(name = "is_deleted")
+    private boolean isDeleted = false;
+    
+    @Column(name = "deletion_date")
+    private LocalDateTime deletionDate;
+    
+    @Column(name = "failed_login_attempts")
+    private Integer failedLoginAttempts = 0;
+    
+    @Column(name = "account_locked_until")
+    private LocalDateTime accountLockedUntil;
+    
+    @Column(name = "last_login_ip")
+    private String lastLoginIp;
+    
+    @Column(name = "last_login_device")
+    private String lastLoginDevice;
+    
+    @Column(name = "last_login_location")
+    private String lastLoginLocation;
+    
+    @Column(name = "password_changed_at")
+    private LocalDateTime passwordChangedAt;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
@@ -102,5 +132,28 @@ public class User {
     // Enum for gender
     public enum Gender {
         Male, Female, Other
+    }
+    
+    // Phương thức để tăng số lần đăng nhập thất bại
+    public void incrementFailedLoginAttempts() {
+        this.failedLoginAttempts = (this.failedLoginAttempts == null) ? 1 : this.failedLoginAttempts + 1;
+    }
+    
+    // Phương thức để đặt lại số lần đăng nhập thất bại
+    public void resetFailedLoginAttempts() {
+        this.failedLoginAttempts = 0;
+    }
+    
+    // Phương thức để kiểm tra tài khoản có bị khóa hay không
+    public boolean isAccountLocked() {
+        return this.accountLockedUntil != null && this.accountLockedUntil.isAfter(LocalDateTime.now());
+    }
+    
+    // Phương thức để tự động mở khóa tài khoản nếu thời gian khóa đã qua
+    public void checkAndUnlockAccount() {
+        if (this.accountLockedUntil != null && this.accountLockedUntil.isBefore(LocalDateTime.now())) {
+            this.accountLockedUntil = null;
+            this.failedLoginAttempts = 0;
+        }
     }
 }

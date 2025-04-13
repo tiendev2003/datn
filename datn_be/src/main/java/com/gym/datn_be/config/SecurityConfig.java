@@ -48,6 +48,7 @@ public class SecurityConfig {
                 .requestMatchers("/actuator/**").permitAll()
                 // Protected endpoints
                 .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/token-management/**").hasRole("ADMIN")
                 .requestMatchers("/management/**").hasAnyRole("ADMIN", "MANAGER")
                 .requestMatchers("/trainer/**").hasAnyRole("ADMIN", "TRAINER")
                 .requestMatchers("/member/**").hasRole("MEMBER")
