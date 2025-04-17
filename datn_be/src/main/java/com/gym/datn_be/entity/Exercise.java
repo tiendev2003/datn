@@ -50,9 +50,6 @@ public class Exercise {
     @Column(name = "target_muscles")
     private String targetMuscles;
     
-    @Column(name = "equipment_needed")
-    private String equipmentNeeded;
-    
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
     

@@ -46,8 +46,5 @@ public class GymArea {
     private boolean isActive = true;
 
     @OneToMany(mappedBy = "area", cascade = CascadeType.ALL)
-    private Set<Equipment> equipments = new HashSet<>();
-
-    @OneToMany(mappedBy = "area", cascade = CascadeType.ALL)
     private Set<ClassSchedule> classSchedules = new HashSet<>();
 }

@@ -3,7 +3,6 @@ package com.gym.datn_be.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.gym.datn_be.entity.Exercise;
@@ -16,7 +15,4 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
     List<Exercise> findByDifficultyLevel(DifficultyLevel difficultyLevel);
     List<Exercise> findByCategory(ExerciseCategory category);
     List<Exercise> findByIsActiveTrue();
-
-    @Query("SELECT e FROM Exercise e WHERE e.equipmentNeeded IS NULL OR e.equipmentNeeded = ''")
-    List<Exercise> findExercisesWithoutEquipment();
 }

@@ -49,9 +49,6 @@ public class UserActivityMetric {
     @Column(name = "areas_used")
     private String areasUsed; // Comma-separated IDs
 
-    @Column(name = "equipment_used")
-    private String equipmentUsed; // Comma-separated IDs
-
     @Column(name = "last_updated", nullable = false)
     private LocalDateTime lastUpdated = LocalDateTime.now();
 }

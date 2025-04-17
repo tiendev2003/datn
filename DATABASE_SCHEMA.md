@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the database schema for the Gym Management System. The database is designed to support all the features described in the requirements document, including user management, booking, membership management, personal training services, class management, equipment tracking, and analytics.
+This document outlines the database schema for the Gym Management System. The database is designed to support all the features described in the requirements document, including user management, booking, membership management, personal training services, class management, and analytics.
 
 ## Database Tables
 
@@ -12,12 +12,10 @@ This document outlines the database schema for the Gym Management System. The da
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | user_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the user |
-| username | VARCHAR(50) | UNIQUE, NOT NULL | User's login username |
 | password_hash | VARCHAR(255) | NOT NULL | Encrypted password |
 | email | VARCHAR(100) | UNIQUE, NOT NULL | User's email address |
 | phone_number | VARCHAR(20) | UNIQUE | User's phone number |
-| first_name | VARCHAR(50) | NOT NULL | User's first name |
-| last_name | VARCHAR(50) | NOT NULL | User's last name |
+| name | VARCHAR(100) | NOT NULL | User's full name |
 | date_of_birth | DATE | | User's date of birth |
 | gender | ENUM('Male', 'Female', 'Other') | | User's gender |
 | address | VARCHAR(255) | | User's address |
@@ -348,7 +346,6 @@ This document outlines the database schema for the Gym Management System. The da
 | muscle_group | VARCHAR(100) | | Primary muscle group targeted |
 | secondary_muscle_groups | VARCHAR(255) | | Secondary muscle groups targeted |
 | difficulty_level | ENUM('Beginner', 'Intermediate', 'Advanced') | NOT NULL | Difficulty level |
-| equipment_needed | VARCHAR(255) | | Equipment needed for the exercise |
 | video_url | VARCHAR(255) | | URL to a demonstration video |
 | image_url | VARCHAR(255) | | URL to an image |
 | created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
@@ -361,10 +358,9 @@ This document outlines the database schema for the Gym Management System. The da
 |-------------|-----------|-------------|-------------|
 | booking_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the booking |
 | user_id | INT | FOREIGN KEY (users.user_id), NOT NULL | Reference to the user |
-| booking_type | ENUM('Gym Session', 'PT Session', 'Class', 'Equipment') | NOT NULL | Type of booking |
+| booking_type | ENUM('Gym Session', 'PT Session', 'Class') | NOT NULL | Type of booking |
 | branch_id | INT | FOREIGN KEY (gym_branches.branch_id), NOT NULL | Reference to the gym branch |
 | area_id | INT | FOREIGN KEY (gym_areas.area_id) | Reference to the gym area (if applicable) |
-| equipment_id | INT | FOREIGN KEY (equipments.equipment_id) | Reference to the equipment (if applicable) |
 | start_datetime | DATETIME | NOT NULL | Start date and time |
 | end_datetime | DATETIME | NOT NULL | End date and time |
 | trainer_id | INT | FOREIGN KEY (trainer_profiles.trainer_id) | Reference to the trainer (for PT sessions) |
@@ -447,68 +443,9 @@ This document outlines the database schema for the Gym Management System. The da
 | booking_time | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Time when the booking was made |
 | notes | TEXT | | Additional notes |
 
-### 7. Equipment Management
+### 7. Notification System
 
-#### 7.1. `equipment_categories`
-| Column Name | Data Type | Constraints | Description |
-|-------------|-----------|-------------|-------------|
-| category_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the category |
-| category_name | VARCHAR(100) | NOT NULL | Name of the category |
-| description | TEXT | | Description of the category |
-
-#### 7.2. `equipments`
-| Column Name | Data Type | Constraints | Description |
-|-------------|-----------|-------------|-------------|
-| equipment_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the equipment |
-| equipment_name | VARCHAR(100) | NOT NULL | Name of the equipment |
-| description | TEXT | | Description of the equipment |
-| category_id | INT | FOREIGN KEY (equipment_categories.category_id), NOT NULL | Reference to the equipment category |
-| branch_id | INT | FOREIGN KEY (gym_branches.branch_id), NOT NULL | Reference to the gym branch |
-| area_id | INT | FOREIGN KEY (gym_areas.area_id), NOT NULL | Reference to the gym area |
-| serial_number | VARCHAR(100) | | Serial number |
-| purchase_date | DATE | | Purchase date |
-| warranty_expiry | DATE | | Warranty expiry date |
-| status | ENUM('Available', 'In Use', 'Under Maintenance', 'Out of Order') | NOT NULL, DEFAULT 'Available' | Status of the equipment |
-| last_maintenance_date | DATE | | Last maintenance date |
-| next_maintenance_date | DATE | | Next scheduled maintenance date |
-| notes | TEXT | | Additional notes |
-| is_bookable | BOOLEAN | NOT NULL, DEFAULT FALSE | Whether this equipment can be booked |
-| image_url | VARCHAR(255) | | URL to an image |
-| created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
-| updated_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | Last update timestamp |
-
-#### 7.3. `equipment_maintenance`
-| Column Name | Data Type | Constraints | Description |
-|-------------|-----------|-------------|-------------|
-| maintenance_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the maintenance record |
-| equipment_id | INT | FOREIGN KEY (equipments.equipment_id), NOT NULL | Reference to the equipment |
-| maintenance_type | ENUM('Routine', 'Repair', 'Inspection') | NOT NULL | Type of maintenance |
-| maintenance_date | DATE | NOT NULL | Date of maintenance |
-| performed_by | VARCHAR(100) | NOT NULL | Person who performed the maintenance |
-| description | TEXT | | Description of the maintenance performed |
-| cost | DECIMAL(10,2) | | Cost of maintenance |
-| next_maintenance_date | DATE | | Next scheduled maintenance date |
-| created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
-
-#### 7.4. `equipment_issues`
-| Column Name | Data Type | Constraints | Description |
-|-------------|-----------|-------------|-------------|
-| issue_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the issue |
-| equipment_id | INT | FOREIGN KEY (equipments.equipment_id), NOT NULL | Reference to the equipment |
-| reported_by | INT | FOREIGN KEY (users.user_id), NOT NULL | User who reported the issue |
-| report_date | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Date and time when the issue was reported |
-| issue_description | TEXT | NOT NULL | Description of the issue |
-| severity | ENUM('Low', 'Medium', 'High', 'Critical') | NOT NULL | Severity of the issue |
-| status | ENUM('Reported', 'Under Review', 'In Progress', 'Resolved', 'Deferred') | NOT NULL, DEFAULT 'Reported' | Status of the issue |
-| assigned_to | INT | FOREIGN KEY (users.user_id) | Staff assigned to fix the issue |
-| resolution | TEXT | | Resolution details |
-| resolved_date | DATETIME | | Date and time when the issue was resolved |
-| notes | TEXT | | Additional notes |
-| updated_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | Last update timestamp |
-
-### 8. Notification System
-
-#### 8.1. `notification_settings`
+#### 7.1. `notification_settings`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | setting_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the setting |
@@ -522,7 +459,7 @@ This document outlines the database schema for the Gym Management System. The da
 | reminder_time | INT | DEFAULT 60 | Time before appointment to send reminder (minutes) |
 | updated_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | Last update timestamp |
 
-#### 8.2. `notifications`
+#### 7.2. `notifications`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | notification_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the notification |
@@ -541,9 +478,9 @@ This document outlines the database schema for the Gym Management System. The da
 | created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
 | updated_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | Last update timestamp |
 
-### 9. Payment System
+### 8. Payment System
 
-#### 9.1. `payment_methods`
+#### 8.1. `payment_methods`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | method_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the payment method |
@@ -551,7 +488,7 @@ This document outlines the database schema for the Gym Management System. The da
 | description | TEXT | | Description of the payment method |
 | is_active | BOOLEAN | NOT NULL, DEFAULT TRUE | Whether the payment method is active |
 
-#### 9.2. `user_payment_methods`
+#### 8.2. `user_payment_methods`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | user_method_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the user payment method |
@@ -566,7 +503,7 @@ This document outlines the database schema for the Gym Management System. The da
 | created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
 | updated_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | Last update timestamp |
 
-#### 9.3. `invoices`
+#### 8.3. `invoices`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | invoice_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the invoice |
@@ -584,7 +521,7 @@ This document outlines the database schema for the Gym Management System. The da
 | created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
 | updated_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | Last update timestamp |
 
-#### 9.4. `invoice_items`
+#### 8.4. `invoice_items`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | item_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the invoice item |
@@ -599,7 +536,7 @@ This document outlines the database schema for the Gym Management System. The da
 | related_entity_type | VARCHAR(50) | | Type of related entity |
 | related_entity_id | INT | | ID of the related entity |
 
-#### 9.5. `payments`
+#### 8.5. `payments`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | payment_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the payment |
@@ -614,7 +551,7 @@ This document outlines the database schema for the Gym Management System. The da
 | notes | TEXT | | Additional notes |
 | created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
 
-#### 9.6. `refunds`
+#### 8.6. `refunds`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | refund_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the refund |
@@ -628,14 +565,14 @@ This document outlines the database schema for the Gym Management System. The da
 | notes | TEXT | | Additional notes |
 | created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
 
-### 10. Feedback and Rating
+### 9. Feedback and Rating
 
-#### 10.1. `user_feedback`
+#### 9.1. `user_feedback`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | feedback_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the feedback |
 | user_id | INT | FOREIGN KEY (users.user_id), NOT NULL | Reference to the user |
-| feedback_type | ENUM('General', 'Trainer', 'Class', 'Equipment', 'Facility', 'Service') | NOT NULL | Type of feedback |
+| feedback_type | ENUM('General', 'Trainer', 'Class', 'Facility', 'Service') | NOT NULL | Type of feedback |
 | related_entity_type | VARCHAR(50) | | Type of related entity |
 | related_entity_id | INT | | ID of the related entity |
 | rating | INT | | Rating (1-5) |
@@ -648,7 +585,7 @@ This document outlines the database schema for the Gym Management System. The da
 | created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
 | updated_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | Last update timestamp |
 
-#### 10.2. `trainer_ratings`
+#### 9.2. `trainer_ratings`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | rating_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the rating |
@@ -661,7 +598,7 @@ This document outlines the database schema for the Gym Management System. The da
 | is_verified | BOOLEAN | NOT NULL, DEFAULT FALSE | Whether the review is from a verified session |
 | created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
 
-#### 10.3. `class_ratings`
+#### 9.3. `class_ratings`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | rating_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the rating |
@@ -673,9 +610,9 @@ This document outlines the database schema for the Gym Management System. The da
 | is_anonymous | BOOLEAN | NOT NULL, DEFAULT FALSE | Whether the review is anonymous |
 | created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
 
-### 11. Marketing and Promotions
+### 10. Marketing and Promotions
 
-#### 11.1. `promotions`
+#### 10.1. `promotions`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | promotion_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the promotion |
@@ -695,7 +632,7 @@ This document outlines the database schema for the Gym Management System. The da
 | created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
 | updated_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | Last update timestamp |
 
-#### 11.2. `promotion_usage`
+#### 10.2. `promotion_usage`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | usage_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the promotion usage |
@@ -706,7 +643,7 @@ This document outlines the database schema for the Gym Management System. The da
 | discount_amount | DECIMAL(10,2) | NOT NULL | Amount of discount applied |
 | notes | TEXT | | Additional notes |
 
-#### 11.3. `referrals`
+#### 10.3. `referrals`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | referral_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the referral |
@@ -722,9 +659,9 @@ This document outlines the database schema for the Gym Management System. The da
 | created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
 | updated_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | Last update timestamp |
 
-### 12. Analytics and Reporting
+### 11. Analytics and Reporting
 
-#### 12.1. `attendance_logs`
+#### 11.1. `attendance_logs`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | log_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the attendance log |
@@ -736,7 +673,7 @@ This document outlines the database schema for the Gym Management System. The da
 | booking_id | INT | FOREIGN KEY (bookings.booking_id) | Reference to the booking (if applicable) |
 | created_at | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Creation timestamp |
 
-#### 12.2. `user_activity_metrics`
+#### 11.2. `user_activity_metrics`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | metric_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the metric |
@@ -747,10 +684,9 @@ This document outlines the database schema for the Gym Management System. The da
 | class_attendances | INT | NOT NULL, DEFAULT 0 | Number of classes attended |
 | pt_sessions | INT | NOT NULL, DEFAULT 0 | Number of PT sessions |
 | areas_used | TEXT | | Areas used (comma-separated IDs) |
-| equipment_used | TEXT | | Equipment used (comma-separated IDs) |
 | last_updated | DATETIME | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | Last update timestamp |
 
-#### 12.3. `system_metrics`
+#### 11.3. `system_metrics`
 | Column Name | Data Type | Constraints | Description |
 |-------------|-----------|-------------|-------------|
 | metric_id | INT | PRIMARY KEY, AUTO_INCREMENT | Unique identifier for the metric |
@@ -761,7 +697,6 @@ This document outlines the database schema for the Gym Management System. The da
 | total_bookings | INT | NOT NULL, DEFAULT 0 | Total number of bookings |
 | class_bookings | INT | NOT NULL, DEFAULT 0 | Number of class bookings |
 | pt_bookings | INT | NOT NULL, DEFAULT 0 | Number of PT bookings |
-| equipment_bookings | INT | NOT NULL, DEFAULT 0 | Number of equipment bookings |
 | membership_sales | DECIMAL(10,2) | NOT NULL, DEFAULT 0 | Total membership sales |
 | pt_package_sales | DECIMAL(10,2) | NOT NULL, DEFAULT 0 | Total PT package sales |
 | peak_hour_start | TIME | | Start of the peak hour |
@@ -802,7 +737,7 @@ All tables have primary key indexes on their ID fields.
 All foreign key columns should be indexed.
 
 ### Additional Indexes
-- `users`: Indexes on `email`, `phone_number`, `username`
+- `users`: Indexes on `email`, `phone_number`
 - `bookings`: Indexes on `user_id`, `start_datetime`, `end_datetime`, `status`
 - `memberships`: Indexes on `user_id`, `membership_status`, `end_date`
 - `trainer_availability`: Composite index on `trainer_id` and `day_of_week`
@@ -818,8 +753,7 @@ Several views can be created to simplify common queries:
 2. `upcoming_classes_view`: Shows all upcoming classes with available spots
 3. `trainer_schedule_view`: Shows trainers' schedules including classes and PT sessions
 4. `revenue_summary_view`: Shows revenue breakdown by type, branch, and date
-5. `equipment_status_view`: Shows current status of all equipment
-6. `member_attendance_view`: Shows attendance patterns by member
+5. `member_attendance_view`: Shows attendance patterns by member
 
 ## Initial Data
 
@@ -830,7 +764,6 @@ The database should be initialized with:
 3. Sample membership types
 4. Essential PT packages
 5. Common class types
-6. Default equipment categories
 7. System configuration settings
 
 ## Data Maintenance and Backup

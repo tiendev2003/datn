@@ -85,14 +85,6 @@ public class AuthController {
         return ResponseEntity.ok(new ApiResponse(true, "Email đã được xác minh thành công"));
     }
     
-    @GetMapping("/check-username/{username}")
-    public ResponseEntity<ApiResponse> checkUsernameAvailability(@PathVariable String username) {
-        boolean isAvailable = authService.isUsernameAvailable(username);
-        return ResponseEntity.ok(
-            new ApiResponse(isAvailable, isAvailable ? "Tên người dùng khả dụng" : "Tên người dùng đã tồn tại")
-        );
-    }
-    
     @GetMapping("/check-email/{email}")
     public ResponseEntity<ApiResponse> checkEmailAvailability(@PathVariable String email) {
         boolean isAvailable = authService.isEmailAvailable(email);

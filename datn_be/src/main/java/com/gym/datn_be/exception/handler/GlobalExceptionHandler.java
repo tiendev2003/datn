@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.gym.datn_be.dto.response.ApiErrorResponse;
 import com.gym.datn_be.exception.AuthenticationException;
 import com.gym.datn_be.exception.ResourceAlreadyExistsException;
+import com.gym.datn_be.exception.ResourceNotFoundException;
 import com.gym.datn_be.exception.TokenRefreshException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -100,6 +101,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
     
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleResourceNotFoundException(
+            ResourceNotFoundException ex, 
+            HttpServletRequest request) {
+        
+        log.error("Resource not found: {}", ex.getMessage());
+        
+        ApiErrorResponse errorResponse = ApiErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error("Resource Not Found")
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+    
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiErrorResponse> handleAccessDeniedException(
             AccessDeniedException ex, 
@@ -118,19 +137,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleGlobalException(
-            Exception ex, 
+            Exception ex,
             HttpServletRequest request) {
+    
+        String path = request.getRequestURI();
         
+        // Bỏ qua Swagger để không làm nó bị lỗi trắng trang
+        if (path.startsWith("/swagger") || path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui")) {
+            throw new RuntimeException(ex); // Cho phép lỗi đi qua để Swagger tự xử lý
+        }
+    
         log.error("Unhandled exception occurred", ex);
-        
+    
         ApiErrorResponse errorResponse = ApiErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .error("Internal Server Error")
                 .message("An unexpected error occurred")
-                .path(request.getRequestURI())
+                .path(path)
                 .build();
-        
+    
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    
 }

@@ -41,7 +41,7 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 - Đặt lịch sử dụng phòng gym, máy tập: Cho phép đặt thời gian sử dụng phòng gym, đặt trước máy tập cụ thể trong khung giờ mong muốn.
 - Đặt lịch với huấn luyện viên: Cho phép chọn huấn luyện viên, xem lịch rảnh và đặt buổi tập cá nhân theo thời gian phù hợp.
 - Đăng ký tham gia lớp tập nhóm: Hiển thị danh sách các lớp tập nhóm, cho phép đăng ký tham gia và nhận thông báo xác nhận.
-- Xem lịch sử tập luyện: Hiển thị thông tin chi tiết về các buổi tập đã hoàn thành, thời gian, khu vực/thiết bị đã sử dụng.
+- Xem lịch sử tập luyện: Hiển thị thông tin chi tiết về các buổi tập đã hoàn thành, thời gian
 - Theo dõi tiến trình cá nhân: Hiển thị biểu đồ, thống kê về tiến độ tập luyện theo thời gian, bao gồm các chỉ số đo lường.
 - Nhận thông báo về lịch đặt, thay đổi lịch: Hệ thống gửi thông báo qua email, SMS hoặc push notification về lịch đặt và cập nhật lịch.
 - Mua và gia hạn gói tập trực tuyến: Cho phép người dùng xem, so sánh, mua mới hoặc gia hạn các gói tập với thanh toán trực tuyến qua các phương thức thanh toán phổ biến.
@@ -63,7 +63,6 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 - Quản lý lịch đặt của người dùng: Xem, xác nhận, hủy và thay đổi các lịch đặt của hội viên, kèm theo ghi chú và thông tin chi tiết.
 - Kiểm tra thông tin hội viên: Tra cứu nhanh thông tin hội viên theo tên, mã số, thẻ thành viên, hiển thị chi tiết gói tập và thời hạn.
 - Xử lý check-in và check-out: Quản lý việc vào/ra của hội viên, xác nhận danh tính, ghi nhận thời gian sử dụng dịch vụ thông qua mã QR/thẻ.
-- Quản lý sắp xếp phòng tập và thiết bị: Cập nhật trạng thái thiết bị, đánh dấu khu vực đang bảo trì/sửa chữa, sắp xếp lại vị trí trang thiết bị.
 - Hỗ trợ người dùng với các vấn đề cơ bản: Giải đáp thắc mắc, hướng dẫn sử dụng hệ thống, xử lý sự cố đơn giản trong quá trình hội viên sử dụng dịch vụ.
 - Xử lý bán gói tập và gói PT tại quầy: Thực hiện quy trình bán gói tập và gói PT cho khách hàng tại quầy, bao gồm tư vấn gói phù hợp, xử lý thanh toán và kích hoạt gói.
 - Quản lý gia hạn gói tập: Nhắc nhở hội viên về việc gia hạn, xử lý yêu cầu gia hạn, áp dụng ưu đãi gia hạn và cập nhật thời hạn thành viên.
@@ -71,9 +70,8 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 #### Yêu Cầu Nâng Cao
 - Quản lý lịch làm việc cá nhân: Xem và cập nhật lịch làm việc, đăng ký ca trực, trao đổi ca với đồng nghiệp với phê duyệt của quản lý.
 - Gửi thông báo tới người dùng: Gửi thông báo cá nhân hoặc theo nhóm đến hội viên về thay đổi lịch, sự kiện, bảo trì hoặc các thông tin quan trọng.
-- Báo cáo vấn đề thiết bị hoặc cơ sở vật chất: Hệ thống báo cáo nhanh với phân loại mức độ ưu tiên, kèm ảnh và mô tả chi tiết vấn đề.
 - Quản lý đăng ký hội viên mới tại quầy: Tạo hồ sơ hội viên mới, xử lý thanh toán, in thẻ thành viên và cung cấp thông tin về quy định phòng gym.
-- Truy cập báo cáo thống kê cơ bản: Xem báo cáo về số lượng khách, giờ cao điểm, tần suất sử dụng thiết bị phục vụ hoạt động hàng ngày.
+- Truy cập báo cáo thống kê cơ bản: Xem báo cáo về số lượng khách, giờ cao điểm
 - Quản lý lịch các lớp tập nhóm: Theo dõi sĩ số lớp, cập nhật thông tin lớp học, điều chỉnh lịch huấn luyện viên, xử lý trường hợp vắng mặt.
 
 ### 4. Huấn Luyện Viên
@@ -102,7 +100,6 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 - Cấu hình thông tin phòng gym (giờ mở cửa, dịch vụ, v.v.): Thiết lập và cập nhật thông tin cơ bản về phòng gym, điều chỉnh lịch hoạt động, thêm/xóa/sửa dịch vụ.
 - Phân quyền cho các tài khoản trong hệ thống: Tạo các nhóm vai trò, thiết lập quyền hạn chi tiết cho từng vai trò, phân quyền đặc biệt cho tài khoản cụ thể.
 - Theo dõi số liệu thống kê cơ bản: Xem báo cáo tổng quan về hoạt động hàng ngày, tuần, tháng với các biểu đồ trực quan về lượng khách, doanh thu.
-- Quản lý cơ sở vật chất và thiết bị: Theo dõi danh sách thiết bị, lịch bảo trì, tình trạng hoạt động, quản lý không gian và khu vực tập luyện.
 - Quản lý gói tập và gói PT: Tạo mới, chỉnh sửa, xóa các gói tập và gói PT, thiết lập giá cả, thời hạn, quyền lợi kèm theo và chính sách ưu đãi.
 - Quản lý doanh thu từ bán gói tập và gói PT: Theo dõi doanh thu từ các gói tập và gói PT, phân tích số liệu bán hàng, theo dõi tỷ lệ chuyển đổi và tỷ lệ tái đăng ký.
 
@@ -114,7 +111,6 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 - Cấu hình hệ thống thông báo tự động: Thiết lập các quy tắc gửi thông báo, mẫu tin nhắn, lịch gửi thông báo tự động cho từng đối tượng người dùng.
 - Sao lưu và khôi phục dữ liệu: Lên lịch sao lưu tự động, kiểm tra tính toàn vẹn dữ liệu, khôi phục dữ liệu từ các bản sao lưu khi cần.
 - Quản lý phản hồi và đánh giá từ khách hàng: Xem, phân loại và phản hồi đánh giá của khách hàng, phân tích mức độ hài lòng và xu hướng phản hồi.
-- Theo dõi mức độ sử dụng thiết bị và khu vực tập luyện: Phân tích dữ liệu về tần suất sử dụng từng thiết bị/khu vực, xác định nhu cầu bảo trì hoặc mở rộng.
 
 ## Yêu Cầu Chức Năng Chung
 
@@ -135,7 +131,7 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 ### Thông Báo và Nhắc Nhở
 - Thông báo tự động về lịch hẹn: Hệ thống tự động gửi thông báo khi có lịch hẹn mới, được xác nhận, bị hủy hoặc thay đổi.
 - Nhắc nhở trước khi đến giờ hẹn: Gửi nhắc nhở 24 giờ, 2 giờ hoặc 30 phút trước buổi hẹn để đảm bảo người dùng không quên.
-- Thông báo khi có thay đổi lịch: Thông báo ngay lập tức cho các bên liên quan khi có bất kỳ thay đổi nào về lịch, khu vực hoặc huấn luyện viên.
+- Thông báo khi có thay đổi lịch: Thông báo ngay lập tức cho các bên liên quan khi có bất kỳ thay đổi nào về lịch hoặc huấn luyện viên.
 - Thông báo về các sự kiện đặc biệt: Gửi thông tin về sự kiện, lớp tập mới, chương trình khuyến mãi hoặc thay đổi giờ hoạt động.
 
 ### Báo Cáo và Thống Kê
@@ -253,10 +249,6 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 | | Đăng ký tham gia lớp | Cao | Người dùng, Nhân viên | Quản lý tài khoản |
 | | Quản lý lớp tập | Cao | Huấn luyện viên, Admin | Quản lý tài khoản |
 | | Theo dõi sĩ số lớp | Trung bình | Huấn luyện viên, Admin | Lớp tập nhóm |
-| **Quản Lý Thiết Bị & Cơ Sở Vật Chất** | Theo dõi danh sách thiết bị | Cao | Admin, Nhân viên | Không |
-| | Lịch bảo trì | Trung bình | Admin, Nhân viên | Quản lý thiết bị |
-| | Báo cáo sự cố | Trung bình | Tất cả người dùng | Quản lý tài khoản |
-| | Phân tích mức độ sử dụng | Thấp | Admin | Quản lý thiết bị, Đặt lịch |
 | **Thông Báo & Nhắc Nhở** | Thông báo lịch hẹn | Cao | Tất cả người dùng | Đặt lịch |
 | | Nhắc nhở trước buổi tập | Cao | Người dùng, Huấn luyện viên | Đặt lịch |
 | | Thông báo thay đổi lịch | Cao | Tất cả người dùng | Đặt lịch |
@@ -329,14 +321,6 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
    - Chương trình giới thiệu
    - Quản lý quà tặng thành viên
    - Chiến dịch marketing
-
-#### Module Vận Hành
-9. **Facility & Equipment Module**
-   - Quản lý danh sách thiết bị
-   - Quản lý không gian tập luyện
-   - Lịch bảo trì thiết bị
-   - Báo cáo sự cố
-   - Phân tích mức độ sử dụng
 
 10. **Check-in/Check-out Module**
     - Quản lý vào/ra

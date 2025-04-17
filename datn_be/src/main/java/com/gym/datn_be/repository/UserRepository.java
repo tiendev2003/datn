@@ -9,9 +9,7 @@ import com.gym.datn_be.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUsername(String username);
     Optional<User> findByEmail(String email);
-    boolean existsByUsername(String username);
     boolean existsByEmail(String email);
     Optional<User> findByActivationToken(String token);
     Optional<User> findByResetToken(String token);

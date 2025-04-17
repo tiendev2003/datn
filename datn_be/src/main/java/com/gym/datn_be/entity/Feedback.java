@@ -80,7 +80,7 @@ public class Feedback {
     
     // Enum for feedback type
     public enum FeedbackType {
-        GENERAL, FACILITY, STAFF, TRAINER, CLASS, EQUIPMENT, SUGGESTION, COMPLAINT
+        GENERAL, FACILITY, STAFF, TRAINER, CLASS, SUGGESTION, COMPLAINT
     }
     
     // Enum for feedback status

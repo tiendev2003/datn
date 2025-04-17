@@ -61,7 +61,7 @@ public class TwoFactorAuthService {
         
         // Tạo QR code
         String qrCodeUrl;
-        String otpAuthUrl = generateOtpAuthUrl(user.getUsername(), secretKey);
+        String otpAuthUrl = generateOtpAuthUrl(user.getEmail(), secretKey);
         try {
             qrCodeUrl = generateQrCodeImageUrl(otpAuthUrl);
         } catch (QrGenerationException e) {

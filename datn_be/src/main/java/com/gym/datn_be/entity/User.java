@@ -38,9 +38,6 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "username", unique = true, nullable = false, length = 50)
-    private String username;
-
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 

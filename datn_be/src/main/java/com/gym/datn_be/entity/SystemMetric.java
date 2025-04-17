@@ -51,9 +51,6 @@ public class SystemMetric {
     @Column(name = "pt_bookings", nullable = false)
     private Integer ptBookings = 0;
 
-    @Column(name = "equipment_bookings", nullable = false)
-    private Integer equipmentBookings = 0;
-
     @Column(name = "membership_sales", nullable = false, precision = 10, scale = 2)
     private BigDecimal membershipSales = BigDecimal.ZERO;
 

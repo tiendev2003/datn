@@ -87,7 +87,7 @@ public class AuthService {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
+                            loginRequest.getEmail(),
                             loginRequest.getPassword()
                     )
             );
@@ -102,8 +102,8 @@ public class AuthService {
             org.springframework.security.core.userdetails.User userDetails = 
                     (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
             
-            User user = userRepository.findByUsername(userDetails.getUsername())
-                    .orElseThrow(() -> new AuthenticationException("User not found with username: " + userDetails.getUsername()));
+            User user = userRepository.findByEmail(userDetails.getUsername())
+                    .orElseThrow(() -> new AuthenticationException("User not found with email: " + userDetails.getUsername()));
 
             // Update last login time
             user.setLastLogin(LocalDateTime.now());
@@ -123,24 +123,19 @@ public class AuthService {
                     .tokenType("Bearer")
                     .expiresIn(jwtExpirationMs / 1000) // Convert to seconds
                     .userId(user.getUserId())
-                    .username(user.getUsername())
                     .email(user.getEmail())
                     .fullName(user.getName())
                     .roles(roles)
                     .build();
         } catch (Exception e) {
             log.error("Authentication error: {}", e.getMessage());
-            throw new AuthenticationException("Invalid username or password");
+            throw new AuthenticationException("Invalid email or password");
         }
     }
 
     @Transactional
     public JwtAuthResponse register(RegisterRequest registerRequest) {
-        // Check if username or email already exists
-        if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new ResourceAlreadyExistsException("Username is already taken");
-        }
-
+        // Check if email already exists
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
             throw new ResourceAlreadyExistsException("Email is already in use");
         }
@@ -151,7 +146,6 @@ public class AuthService {
 
         // Create user entity
         User user = new User();
-        user.setUsername(registerRequest.getUsername());
         user.setPasswordHash(passwordEncoder.encode(registerRequest.getPassword()));
         user.setEmail(registerRequest.getEmail());
         user.setName(registerRequest.getName());
@@ -180,7 +174,7 @@ public class AuthService {
         // Authenticate the newly registered user
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        registerRequest.getUsername(),
+                        registerRequest.getEmail(),
                         registerRequest.getPassword()
                 )
         );
@@ -198,7 +192,6 @@ public class AuthService {
                 .tokenType("Bearer")
                 .expiresIn(jwtExpirationMs / 1000) // Convert to seconds
                 .userId(savedUser.getUserId())
-                .username(savedUser.getUsername())
                 .email(savedUser.getEmail())
                 .fullName(savedUser.getName())
                 .roles(Collections.singletonList("MEMBER"))
@@ -212,8 +205,8 @@ public class AuthService {
             throw new TokenRefreshException("Invalid refresh token");
         }
 
-        String username = tokenProvider.getUsernameFromToken(refreshToken);
-        User user = userRepository.findByUsername(username)
+        String email = tokenProvider.getUsernameFromToken(refreshToken);
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TokenRefreshException("User not found for the token"));
 
         // Create a new authentication with the user's details
@@ -237,7 +230,6 @@ public class AuthService {
                 .tokenType("Bearer")
                 .expiresIn(jwtExpirationMs / 1000) // Convert to seconds
                 .userId(user.getUserId())
-                .username(user.getUsername())
                 .email(user.getEmail())
                 .fullName(user.getName())
                 .roles(roles)
@@ -323,9 +315,9 @@ public class AuthService {
             throw new AuthenticationException("Người dùng chưa xác thực");
         }
         
-        String username = authentication.getName();
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
         
         // Validate current password
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash())) {
@@ -396,10 +388,6 @@ public class AuthService {
         sendVerificationEmail(user);
     }
     
-    public boolean isUsernameAvailable(String username) {
-        return !userRepository.existsByUsername(username);
-    }
-    
     public boolean isEmailAvailable(String email) {
         return !userRepository.existsByEmail(email);
     }
@@ -407,6 +395,7 @@ public class AuthService {
     private boolean isTokenBlacklisted(String token) {
         return refreshTokenBlacklistRepository.existsByToken(token);
     }
+    
     @Transactional
     public JwtAuthResponse verifyTwoFactorAuthentication(TwoFactorLoginRequest request) {
         try {
@@ -416,8 +405,8 @@ public class AuthService {
             }
 
             // Lấy thông tin người dùng từ token tạm thời
-            String username = tokenProvider.getUsernameFromToken(request.getTemporaryToken());
-            User user = userRepository.findByUsername(username)
+            String email = tokenProvider.getUsernameFromToken(request.getTemporaryToken());
+            User user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new AuthenticationException("Người dùng không tồn tại"));
 
             // Kiểm tra nếu người dùng đã bật 2FA
@@ -457,7 +446,6 @@ public class AuthService {
                     .tokenType("Bearer")
                     .expiresIn(jwtExpirationMs / 1000)
                     .userId(user.getUserId())
-                    .username(user.getUsername())
                     .email(user.getEmail())
                     .fullName(user.getName())
                     .roles(roles)
@@ -527,8 +515,8 @@ public class AuthService {
             throw new AuthenticationException("Người dùng chưa xác thực");
         }
 
-        String username = authentication.getName();
-        return userRepository.findByUsername(username)
+        String email = authentication.getName();
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy thông tin người dùng"));
     }
 

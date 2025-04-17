@@ -40,8 +40,7 @@ public class DataInitializer {
                 "MEMBER_READ", "MEMBER_CREATE", "MEMBER_UPDATE", "MEMBER_DELETE",
                 "TRAINER_READ", "TRAINER_CREATE", "TRAINER_UPDATE", "TRAINER_DELETE",
                 "CLASS_READ", "CLASS_CREATE", "CLASS_UPDATE", "CLASS_DELETE",
-                "BOOKING_READ", "BOOKING_CREATE", "BOOKING_UPDATE", "BOOKING_DELETE",
-                "EQUIPMENT_READ", "EQUIPMENT_CREATE", "EQUIPMENT_UPDATE", "EQUIPMENT_DELETE"
+                "BOOKING_READ", "BOOKING_CREATE", "BOOKING_UPDATE", "BOOKING_DELETE"
         );
 
         Set<Permission> adminPermissions = new HashSet<>();
@@ -65,8 +64,7 @@ public class DataInitializer {
                 permName.startsWith("MEMBER") || 
                 permName.startsWith("TRAINER") || 
                 permName.startsWith("CLASS") || 
-                permName.startsWith("BOOKING") || 
-                permName.startsWith("EQUIPMENT")) {
+                permName.startsWith("BOOKING")) {
                 managerPermissions.add(permission);
             }
             
@@ -80,8 +78,7 @@ public class DataInitializer {
             if (permName.equals("MEMBER_READ") || 
                 permName.equals("CLASS_READ") || 
                 permName.equals("BOOKING_READ") || 
-                permName.equals("BOOKING_CREATE") ||
-                permName.equals("EQUIPMENT_READ")) {
+                permName.equals("BOOKING_CREATE")) {
                 memberPermissions.add(permission);
             }
         }

@@ -47,7 +47,7 @@ public class JwtTokenProvider {
                 .collect(Collectors.joining(","));
 
         return Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
+                .setSubject(userPrincipal.getUsername()) // userPrincipal.getUsername() is now the email
                 .claim("authorities", authorities)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
@@ -62,7 +62,7 @@ public class JwtTokenProvider {
         Date expiryDate = new Date(now.getTime() + refreshExpirationMs);
 
         return Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
+                .setSubject(userPrincipal.getUsername()) // userPrincipal.getUsername() is now the email
                 .claim("type", "refresh")
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
@@ -81,7 +81,7 @@ public class JwtTokenProvider {
                 .collect(Collectors.joining(","));
 
         return Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
+                .setSubject(userPrincipal.getUsername()) // userPrincipal.getUsername() is now the email
                 .claim("authorities", authorities)
                 .claim("type", "temporary")
                 .setIssuedAt(now)
@@ -140,7 +140,7 @@ public class JwtTokenProvider {
         }
     }
 
-    // Get username from JWT token
+    // Get email from JWT token
     public String getUsernameFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())

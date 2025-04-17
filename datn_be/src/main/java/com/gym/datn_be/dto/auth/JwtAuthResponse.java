@@ -17,7 +17,6 @@ public class JwtAuthResponse {
     private String tokenType = "Bearer";
     private Long expiresIn;
     private Long userId;
-    private String username;
     private String email;
     private String fullName;
     private List<String> roles;

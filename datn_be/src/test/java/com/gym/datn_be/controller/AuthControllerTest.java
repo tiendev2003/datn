@@ -73,7 +73,7 @@ public class AuthControllerTest {
     public void testLoginSuccess() throws Exception {
         // Prepare test data
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setUsername("testuser");
+        loginRequest.setEmail("test@example.com");
         loginRequest.setPassword("password123");
 
         List<String> roles = Arrays.asList("MEMBER");
@@ -83,7 +83,6 @@ public class AuthControllerTest {
                 .tokenType("Bearer")
                 .expiresIn(3600L)
                 .userId(1L)
-                .username("testuser")
                 .email("test@example.com")
                 .fullName("Test User")
                 .roles(roles)
@@ -104,7 +103,6 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.tokenType").value("Bearer"))
                 .andExpect(jsonPath("$.expiresIn").value(3600))
                 .andExpect(jsonPath("$.userId").value(1))
-                .andExpect(jsonPath("$.username").value("testuser"))
                 .andExpect(jsonPath("$.email").value("test@example.com"))
                 .andExpect(jsonPath("$.fullName").value("Test User"))
                 .andExpect(jsonPath("$.roles[0]").value("MEMBER"));
@@ -114,12 +112,12 @@ public class AuthControllerTest {
     public void testLoginWithInvalidCredentials() throws Exception {
         // Prepare test data
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setUsername("testuser");
+        loginRequest.setEmail("test@example.com");
         loginRequest.setPassword("wrongpassword");
 
         // Mock service behavior
         when(authService.login(any(LoginRequest.class)))
-                .thenThrow(new AuthenticationException("Invalid username or password"));
+                .thenThrow(new AuthenticationException("Invalid email or password"));
 
         // Perform the request and validate
         mockMvc.perform(post("/auth/login")
@@ -130,8 +128,8 @@ public class AuthControllerTest {
     }
 
     @Test
-    public void testLoginWithMissingUsername() throws Exception {
-        // Prepare test data with validation error (missing username)
+    public void testLoginWithMissingEmail() throws Exception {
+        // Prepare test data with validation error (missing email)
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setPassword("password123");
 
@@ -147,7 +145,7 @@ public class AuthControllerTest {
     public void testLoginWithMissingPassword() throws Exception {
         // Prepare test data with validation error (missing password)
         LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setUsername("testuser");
+        loginRequest.setEmail("test@example.com");
 
         // Perform the request and validate
         mockMvc.perform(post("/auth/login")
@@ -162,7 +160,6 @@ public class AuthControllerTest {
     public void testRegisterSuccess() throws Exception {
         // Prepare test data
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setUsername("newuser");
         registerRequest.setPassword("password123");
         registerRequest.setEmail("newuser@example.com");
         registerRequest.setName("New User");
@@ -178,7 +175,6 @@ public class AuthControllerTest {
                 .tokenType("Bearer")
                 .expiresIn(3600L)
                 .userId(1L)
-                .username("newuser")
                 .email("newuser@example.com")
                 .fullName("New User")
                 .roles(roles)
@@ -199,39 +195,15 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.tokenType").value("Bearer"))
                 .andExpect(jsonPath("$.expiresIn").value(3600))
                 .andExpect(jsonPath("$.userId").value(1))
-                .andExpect(jsonPath("$.username").value("newuser"))
                 .andExpect(jsonPath("$.email").value("newuser@example.com"))
                 .andExpect(jsonPath("$.fullName").value("New User"))
                 .andExpect(jsonPath("$.roles[0]").value("MEMBER"));
     }
 
     @Test
-    public void testRegisterWithExistingUsername() throws Exception {
-        // Prepare test data
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setUsername("existinguser");
-        registerRequest.setPassword("password123");
-        registerRequest.setEmail("new@example.com");
-        registerRequest.setName("Existing User");
-        registerRequest.setPhoneNumber("+1234567890");
-
-        // Mock service behavior
-        when(authService.register(any(RegisterRequest.class)))
-                .thenThrow(new ResourceAlreadyExistsException("Username is already taken"));
-
-        // Perform the request and validate
-        mockMvc.perform(post("/auth/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(registerRequest))
-                .with(SecurityMockMvcRequestPostProcessors.csrf()))
-                .andExpect(status().isConflict());
-    }
-
-    @Test
     public void testRegisterWithExistingEmail() throws Exception {
         // Prepare test data
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setUsername("newuser");
         registerRequest.setPassword("password123");
         registerRequest.setEmail("existing@example.com");
         registerRequest.setName("New User");
@@ -254,7 +226,7 @@ public class AuthControllerTest {
         // Prepare test data with validation errors (missing required fields)
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setPassword("password123");
-        // Missing username, email, and name
+        // Missing email and name
 
         // Perform the request and validate
         mockMvc.perform(post("/auth/register")
@@ -268,7 +240,6 @@ public class AuthControllerTest {
     public void testRegisterWithInvalidEmail() throws Exception {
         // Prepare test data with validation error (invalid email)
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setUsername("newuser");
         registerRequest.setPassword("password123");
         registerRequest.setEmail("invalidemail");  // Invalid email format
         registerRequest.setName("New User");
@@ -285,7 +256,6 @@ public class AuthControllerTest {
     public void testRegisterWithShortPassword() throws Exception {
         // Prepare test data with validation error (short password)
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setUsername("newuser");
         registerRequest.setPassword("short");  // Too short
         registerRequest.setEmail("newuser@example.com");
         registerRequest.setName("New User");
@@ -312,7 +282,6 @@ public class AuthControllerTest {
                 .tokenType("Bearer")
                 .expiresIn(3600L)
                 .userId(1L)
-                .username("testuser")
                 .email("test@example.com")
                 .fullName("Test User")
                 .roles(roles)
@@ -333,7 +302,6 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.tokenType").value("Bearer"))
                 .andExpect(jsonPath("$.expiresIn").value(3600))
                 .andExpect(jsonPath("$.userId").value(1))
-                .andExpect(jsonPath("$.username").value("testuser"))
                 .andExpect(jsonPath("$.email").value("test@example.com"))
                 .andExpect(jsonPath("$.fullName").value("Test User"))
                 .andExpect(jsonPath("$.roles[0]").value("MEMBER"));
