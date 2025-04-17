@@ -31,9 +31,8 @@ public class CheckInOut {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "branch_id", nullable = false)
-    private GymBranch branch;
+    @Column(name = "location", nullable = false)
+    private String location;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id")

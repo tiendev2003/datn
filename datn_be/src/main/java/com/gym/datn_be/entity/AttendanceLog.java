@@ -30,9 +30,8 @@ public class AttendanceLog {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "branch_id", nullable = false)
-    private GymBranch branch;
+    @Column(name = "location", nullable = false)
+    private String location;
 
     @Column(name = "check_in_time", nullable = false)
     private LocalDateTime checkInTime;

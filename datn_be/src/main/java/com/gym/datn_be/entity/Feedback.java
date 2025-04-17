@@ -46,9 +46,8 @@ public class Feedback {
     @Column(name = "rating")
     private Integer rating;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "branch_id")
-    private GymBranch branch;
+    @Column(name = "branch_location")
+    private String branchLocation;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
@@ -58,9 +57,12 @@ public class Feedback {
     @JoinColumn(name = "class_id")
     private ClassSchedule classSchedule;
     
+    @Column(name = "is_anonymous", nullable = false)
+    private boolean isAnonymous = false;
+    
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private FeedbackStatus status = FeedbackStatus.NEW;
+    private FeedbackStatus status = FeedbackStatus.PENDING;
     
     @Column(name = "response")
     private String response;
@@ -69,22 +71,19 @@ public class Feedback {
     @JoinColumn(name = "responded_by")
     private User respondedBy;
     
-    @Column(name = "responded_at")
-    private LocalDateTime respondedAt;
+    @Column(name = "response_date")
+    private LocalDateTime responseDate;
     
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
     
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt = LocalDateTime.now();
-    
     // Enum for feedback type
     public enum FeedbackType {
-        GENERAL, FACILITY, STAFF, TRAINER, CLASS, SUGGESTION, COMPLAINT
+        GENERAL, FACILITY, CLASS, TRAINER, STAFF, OTHER
     }
     
     // Enum for feedback status
     public enum FeedbackStatus {
-        NEW, IN_PROGRESS, RESOLVED, CLOSED
+        PENDING, RESPONDED, RESOLVED, CLOSED
     }
 }

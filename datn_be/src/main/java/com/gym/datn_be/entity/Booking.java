@@ -37,14 +37,6 @@ public class Booking {
     @Column(name = "booking_type", nullable = false)
     private BookingType bookingType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "branch_id", nullable = false)
-    private GymBranch branch;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "area_id")
-    private GymArea area;
-
     @Column(name = "start_datetime", nullable = false)
     private LocalDateTime startDateTime;
 
@@ -61,10 +53,7 @@ public class Booking {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private BookingStatus status = BookingStatus.BOOKED;
-
-    @Column(name = "cancellation_reason")
-    private String cancellationReason;
+    private BookingStatus status = BookingStatus.PENDING;
 
     @Column(name = "notes")
     private String notes;
@@ -74,6 +63,9 @@ public class Booking {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
+    
+    @Column(name = "location")
+    private String location;
 
     // Enum for booking type
     public enum BookingType {
@@ -82,6 +74,6 @@ public class Booking {
 
     // Enum for booking status
     public enum BookingStatus {
-        BOOKED, CHECKED_IN, COMPLETED, CANCELLED, NO_SHOW
+        PENDING, CONFIRMED, CANCELLED, COMPLETED, NO_SHOW
     }
 }

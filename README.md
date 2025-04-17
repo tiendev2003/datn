@@ -30,31 +30,26 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 - Đăng ký dùng thử dịch vụ: Cho phép khách vãng lai đăng ký sử dụng dịch vụ miễn phí trong thời gian giới hạn để trải nghiệm trước khi quyết định đăng ký làm thành viên.
 
 #### Yêu Cầu Nâng Cao
-- Xem tour ảo 360° của phòng gym: Cho phép người dùng tham quan ảo không gian phòng gym thông qua công nghệ 360° để có cái nhìn tổng quan về cơ sở vật chất.
 - Đọc đánh giá và phản hồi từ người dùng hiện tại: Hiển thị các đánh giá, nhận xét từ người dùng đã sử dụng dịch vụ kèm theo thông tin về mức độ hài lòng (sao/điểm).
 - Tham khảo lịch trình các lớp tập nhóm: Hiển thị lịch các lớp tập nhóm theo ngày/tuần/tháng, kèm thông tin về nội dung lớp, huấn luyện viên phụ trách và số lượng chỗ còn trống.
 
-### 2. Người Dùng (Đã Đăng Ký)
+### 2. Hội Viên (Người Dùng Đã Đăng Ký)
 
 #### Yêu Cầu Cơ Bản
 - Đăng nhập và quản lý tài khoản cá nhân: Cho phép người dùng đăng nhập an toàn, cập nhật thông tin cá nhân, thay đổi mật khẩu và quản lý các cài đặt riêng tư.
-- Đặt lịch sử dụng phòng gym, máy tập: Cho phép đặt thời gian sử dụng phòng gym, đặt trước máy tập cụ thể trong khung giờ mong muốn.
 - Đặt lịch với huấn luyện viên: Cho phép chọn huấn luyện viên, xem lịch rảnh và đặt buổi tập cá nhân theo thời gian phù hợp.
-- Đăng ký tham gia lớp tập nhóm: Hiển thị danh sách các lớp tập nhóm, cho phép đăng ký tham gia và nhận thông báo xác nhận.
-- Xem lịch sử tập luyện: Hiển thị thông tin chi tiết về các buổi tập đã hoàn thành, thời gian
+- Đăng ký tham gia tập chung với người khác.
+- Xem lịch sử tập luyện: Hiển thị thông tin chi tiết về các buổi tập đã hoàn thành, thời gian, khu vực/thiết bị đã sử dụng.
 - Theo dõi tiến trình cá nhân: Hiển thị biểu đồ, thống kê về tiến độ tập luyện theo thời gian, bao gồm các chỉ số đo lường.
 - Nhận thông báo về lịch đặt, thay đổi lịch: Hệ thống gửi thông báo qua email, SMS hoặc push notification về lịch đặt và cập nhật lịch.
-- Mua và gia hạn gói tập trực tuyến: Cho phép người dùng xem, so sánh, mua mới hoặc gia hạn các gói tập với thanh toán trực tuyến qua các phương thức thanh toán phổ biến.
+- Mua và gia hạn gói tập trực tuyến: Cho phép người dùng xem, mua mới hoặc gia hạn các gói tập với thanh toán trực tuyến qua các phương thức thanh toán phổ biến.
 - Mua gói PT (Personal Training): Cho phép đăng ký gói huấn luyện cá nhân với huấn luyện viên đã chọn, xem chi tiết gói (số buổi, giá cả, thời hạn) và thanh toán trực tuyến.
 
 #### Yêu Cầu Nâng Cao
 - Quản lý mục tiêu tập luyện cá nhân: Cho phép thiết lập, theo dõi và cập nhật các mục tiêu tập luyện ngắn hạn và dài hạn.
-- Xem và theo dõi chỉ số cơ thể (BMI, cân nặng, v.v.): Nhập và theo dõi các chỉ số cơ thể theo thời gian, hiển thị dưới dạng biểu đồ trực quan.
-- Nhận kế hoạch tập luyện được cá nhân hóa: Nhận chương trình tập luyện tùy chỉnh dựa trên mục tiêu và khả năng cá nhân từ huấn luyện viên.
 - Đánh giá và gửi phản hồi về dịch vụ, huấn luyện viên: Hệ thống đánh giá với thang điểm, bình luận chi tiết sau mỗi buổi tập/khóa học.
-- Tích hợp với ứng dụng theo dõi sức khỏe: Đồng bộ dữ liệu với các ứng dụng phổ biến như Google Fit, Apple Health, Fitbit.
-- Tùy chỉnh chế độ thông báo: Cài đặt thời gian, tần suất và loại thông báo muốn nhận (email, SMS, push notification).
 - Gia hạn thành viên trực tuyến: Xem thông tin hết hạn, lựa chọn và thanh toán gói gia hạn trực tuyến.
+- Xem và theo dõi chỉ số cơ thể (BMI, cân nặng, v.v.): Nhập và theo dõi các chỉ số cơ thể theo thời gian, hiển thị dưới dạng biểu đồ trực quan.
 
 ### 3. Nhân Viên
 
@@ -69,9 +64,8 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 
 #### Yêu Cầu Nâng Cao
 - Quản lý lịch làm việc cá nhân: Xem và cập nhật lịch làm việc, đăng ký ca trực, trao đổi ca với đồng nghiệp với phê duyệt của quản lý.
-- Gửi thông báo tới người dùng: Gửi thông báo cá nhân hoặc theo nhóm đến hội viên về thay đổi lịch, sự kiện, bảo trì hoặc các thông tin quan trọng.
+- Gửi thông báo tới người dùng: Gửi thông báo cá nhân hoặc theo nhóm đến hội viên về thay đổi lịch, sự kiện hoặc các thông tin quan trọng.
 - Quản lý đăng ký hội viên mới tại quầy: Tạo hồ sơ hội viên mới, xử lý thanh toán, in thẻ thành viên và cung cấp thông tin về quy định phòng gym.
-- Truy cập báo cáo thống kê cơ bản: Xem báo cáo về số lượng khách, giờ cao điểm
 - Quản lý lịch các lớp tập nhóm: Theo dõi sĩ số lớp, cập nhật thông tin lớp học, điều chỉnh lịch huấn luyện viên, xử lý trường hợp vắng mặt.
 
 ### 4. Huấn Luyện Viên
@@ -86,9 +80,6 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 #### Yêu Cầu Nâng Cao
 - Tạo kế hoạch tập luyện và dinh dưỡng cá nhân hóa: Thiết kế kế hoạch toàn diện kết hợp giữa lịch tập và chế độ dinh dưỡng dựa trên đặc điểm cơ thể và mục tiêu.
 - Gửi phản hồi và đánh giá tiến độ cho khách hàng: Tạo báo cáo đánh giá định kỳ, gửi nhận xét và lời khuyên cải thiện thông qua nền tảng.
-- Quản lý hồ sơ khách hàng đang huấn luyện: Lưu trữ và truy cập thông tin chi tiết về sức khỏe, tiền sử y tế, kết quả kiểm tra thể lực của khách hàng.
-- Đặt mục tiêu và theo dõi tiến độ cho khách hàng: Thiết lập các mục tiêu ngắn, trung và dài hạn, theo dõi và điều chỉnh kịp thời dựa trên kết quả thực tế.
-- Chia sẻ bài tập và hướng dẫn trực tuyến: Tải lên video, hình ảnh hướng dẫn tập luyện, chia sẻ tài liệu chuyên môn với khách hàng.
 - Nhận thông báo về các cuộc hẹn mới: Nhận thông báo ngay lập tức khi có đặt lịch mới, thay đổi lịch hoặc hủy lịch từ khách hàng.
 - Quản lý thời gian rảnh và lịch làm việc: Cập nhật thời gian có thể nhận khách, đánh dấu thời gian không làm việc, điều chỉnh lịch trình linh hoạt.
 
@@ -104,10 +95,6 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 - Quản lý doanh thu từ bán gói tập và gói PT: Theo dõi doanh thu từ các gói tập và gói PT, phân tích số liệu bán hàng, theo dõi tỷ lệ chuyển đổi và tỷ lệ tái đăng ký.
 
 #### Yêu Cầu Nâng Cao
-- Phân tích dữ liệu và báo cáo thống kê chi tiết: Tạo và xuất báo cáo tùy chỉnh với nhiều tiêu chí và bộ lọc, phân tích xu hướng dài hạn và dự báo tương lai.
-- Quản lý marketing và chương trình khuyến mãi: Tạo và quản lý các chiến dịch marketing, ưu đãi, khuyến mãi theo mùa, chương trình giới thiệu, quà tặng thành viên.
-- Theo dõi hiệu suất của nhân viên và huấn luyện viên: Đánh giá KPI, báo cáo hiệu suất, phân tích phản hồi của khách hàng về từng nhân viên/huấn luyện viên.
-- Quản lý tài chính và doanh thu: Theo dõi các khoản thu chi, báo cáo tài chính, kiểm soát dòng tiền, tạo báo cáo tài chính định kỳ.
 - Cấu hình hệ thống thông báo tự động: Thiết lập các quy tắc gửi thông báo, mẫu tin nhắn, lịch gửi thông báo tự động cho từng đối tượng người dùng.
 - Sao lưu và khôi phục dữ liệu: Lên lịch sao lưu tự động, kiểm tra tính toàn vẹn dữ liệu, khôi phục dữ liệu từ các bản sao lưu khi cần.
 - Quản lý phản hồi và đánh giá từ khách hàng: Xem, phân loại và phản hồi đánh giá của khách hàng, phân tích mức độ hài lòng và xu hướng phản hồi.
@@ -316,38 +303,26 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
    - Quản lý lịch lớp
    - Theo dõi sĩ số
 
-8. **Marketing & Promotion Module**
-   - Quản lý chương trình khuyến mãi
-   - Chương trình giới thiệu
-   - Quản lý quà tặng thành viên
-   - Chiến dịch marketing
-
-10. **Check-in/Check-out Module**
+8. **Check-in/Check-out Module**
     - Quản lý vào/ra
     - Xác thực danh tính
     - Ghi nhận thời gian sử dụng
 
-11. **Staff Management Module**
+9. **Staff Management Module**
     - Quản lý nhân viên
     - Phân ca làm việc
     - Đánh giá hiệu suất
     - Quản lý lương
 
 #### Module Phân Tích & Báo Cáo
-12. **Analytics & Reporting Module**
+10. **Analytics & Reporting Module**
     - Báo cáo sử dụng dịch vụ
     - Báo cáo doanh thu
     - Phân tích hiệu suất huấn luyện viên
     - Phân tích mức độ hài lòng
     - Thống kê thời gian cao điểm
 
-13. **Financial Management Module**
-    - Theo dõi thu chi
-    - Báo cáo tài chính
-    - Kiểm soát dòng tiền
-    - Quản lý thanh toán
-
-14. **Integration Module**
+11. **Integration Module**
     - Tích hợp với ứng dụng theo dõi sức khỏe
     - Tích hợp với hệ thống thanh toán
     - Tích hợp với phần mềm kế toán
@@ -362,76 +337,4 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 | **Nhân Viên** | - Authentication & Authorization<br>- User Management (hạn chế)<br>- Booking Management<br>- Notification<br>- Membership & Package<br>- PT Service<br>- Class Management<br>- Facility & Equipment (hạn chế)<br>- Check-in/Check-out<br>- Staff Management (hạn chế) | - Quản lý lịch đặt<br>- Hỗ trợ khách hàng<br>- Bán gói tập/PT<br>- Quản lý check-in/out<br>- Báo cáo sự cố<br>- Xem thông tin cơ bản |
 | **Huấn Luyện Viên** | - Authentication & Authorization<br>- User Management (hạn chế)<br>- Booking Management (hạn chế)<br>- Notification<br>- PT Service<br>- Class Management<br>- Staff Management (hạn chế) | - Quản lý lịch dạy<br>- Tạo kế hoạch tập<br>- Theo dõi khách hàng<br>- Quản lý lớp tập<br>- Đánh giá tiến độ |
 | **Admin (Quản Lý)** | Tất cả các module | Toàn quyền quản lý hệ thống |
-
-### Mối Quan Hệ Giữa Các Module
-
-```
-                                +-------------------+
-                                |                   |
-                                | Authentication &  |
-                                | Authorization     |
-                                |                   |
-                                +--------+----------+
-                                         |
-                                         v
-+-----------------+           +----------+---------+            +-------------------+
-|                 |           |                    |            |                   |
-| Marketing &     +<--------->+  User Management   +<---------->+ Analytics &       |
-| Promotion       |           |                    |            | Reporting         |
-|                 |           +----+-----+----+----+            |                   |
-+-----------------+                |     |    |                 +--------+----------+
-                                   |     |    |                          |
-                                   |     |    |                          |
-                                   v     v    v                          v
-+------------------+     +---------+   +------+-------+     +------------+---------+
-|                  |     |             |              |     |                      |
-| Facility &       |     | Booking     | Membership & |     | Financial            |
-| Equipment        +<--->+ Management  | Package      +<--->+ Management           |
-|                  |     |             |              |     |                      |
-+--------+---------+     +------+------+     +--------+     +----------------------+
-         |                      |            |
-         |                      |            |
-         v                      v            v
-+----------------+      +-------+-----+    +-+--------------+     +-----------------+
-|                |      |             |    |                |     |                 |
-| Check-in/      |      | Notification|    | PT Service     +<--->+ Class           |
-| Check-out      +<---->+             |    |                |     | Management      |
-|                |      |             |    |                |     |                 |
-+----------------+      +-------------+    +------+---------+     +-----------------+
-                                                  |
-                                                  v
-                                          +-------+---------+
-                                          |                 |
-                                          | Staff           |
-                                          | Management      |
-                                          |                 |
-                                          +-----------------+
-```
-
-### Thứ Tự Ưu Tiên Phát Triển
-
-1. **Phase 1 (Core System):**
-   - Authentication & Authorization Module
-   - User Management Module
-   - Booking Management Module (cơ bản)
-   - Membership & Package Module (cơ bản)
-   - Check-in/Check-out Module (cơ bản)
-
-2. **Phase 2 (Business Features):**
-   - PT Service Module
-   - Class Management Module
-   - Notification Module
-   - Facility & Equipment Module (cơ bản)
-   - Staff Management Module (cơ bản)
-
-3. **Phase 3 (Advanced Features):**
-   - Analytics & Reporting Module
-   - Financial Management Module
-   - Marketing & Promotion Module
-   - Nâng cao tất cả các module trước đó
-
-4. **Phase 4 (Integration & Optimization):**
-   - Integration Module
-   - Tối ưu hóa hiệu suất
-   - Cải thiện trải nghiệm người dùng
-   - Mở rộng tính năng
+ 

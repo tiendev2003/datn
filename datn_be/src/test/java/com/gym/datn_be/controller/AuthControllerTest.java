@@ -1,6 +1,7 @@
 package com.gym.datn_be.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -16,9 +17,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
@@ -45,22 +48,42 @@ import com.gym.datn_be.service.AuthService;
                                      classes = {SecurityConfig.class, JwtAuthenticationFilter.class})
         })
 @AutoConfigureMockMvc(addFilters = false)
-
 public class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Autowired
     private AuthService authService;
     
-    @MockBean
+    @Autowired
     private JwtTokenProvider jwtTokenProvider;
     
-    @MockBean
+    @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
     private ObjectMapper objectMapper;
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        @Primary
+        public AuthService authService() {
+            return mock(AuthService.class);
+        }
+        
+        @Bean
+        @Primary
+        public JwtTokenProvider jwtTokenProvider() {
+            return mock(JwtTokenProvider.class);
+        }
+        
+        @Bean
+        @Primary
+        public CustomUserDetailsService customUserDetailsService() {
+            return mock(CustomUserDetailsService.class);
+        }
+    }
 
     @BeforeEach
     public void setup() {

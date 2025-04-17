@@ -10,16 +10,14 @@ import org.springframework.stereotype.Repository;
 import com.gym.datn_be.entity.Booking;
 import com.gym.datn_be.entity.Booking.BookingStatus;
 import com.gym.datn_be.entity.Booking.BookingType;
-import com.gym.datn_be.entity.GymBranch;
-import com.gym.datn_be.entity.User;
+ import com.gym.datn_be.entity.User;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByUser(User user);
     List<Booking> findByStatus(BookingStatus status);
     List<Booking> findByBookingType(BookingType bookingType);
-    List<Booking> findByBranch(GymBranch branch);
-    
+     
     @Query("SELECT b FROM Booking b WHERE b.user = ?1 AND b.status = ?2")
     List<Booking> findByUserAndStatus(User user, BookingStatus status);
     

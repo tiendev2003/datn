@@ -3,16 +3,12 @@ package com.gym.datn_be.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,9 +25,8 @@ public class SystemMetric {
     @Column(name = "metric_id")
     private Long metricId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "branch_id", nullable = false)
-    private GymBranch branch;
+    @Column(name = "location", nullable = false)
+    private String location;
 
     @Column(name = "metric_date", nullable = false)
     private LocalDate metricDate;
@@ -57,12 +52,15 @@ public class SystemMetric {
     @Column(name = "pt_package_sales", nullable = false, precision = 10, scale = 2)
     private BigDecimal ptPackageSales = BigDecimal.ZERO;
 
-    @Column(name = "peak_hour_start")
-    private LocalTime peakHourStart;
+    @Column(name = "other_sales", nullable = false, precision = 10, scale = 2)
+    private BigDecimal otherSales = BigDecimal.ZERO;
 
-    @Column(name = "peak_hour_visitors")
-    private Integer peakHourVisitors;
+    @Column(name = "total_revenue", nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalRevenue = BigDecimal.ZERO;
 
-    @Column(name = "last_updated", nullable = false)
-    private LocalDateTime lastUpdated = LocalDateTime.now();
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Column(name = "notes")
+    private String notes;
 }

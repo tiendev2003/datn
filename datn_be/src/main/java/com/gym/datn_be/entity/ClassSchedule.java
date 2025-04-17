@@ -33,13 +33,9 @@ public class ClassSchedule {
     @JoinColumn(name = "class_type_id", nullable = false)
     private ClassType classType;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "branch_id", nullable = false)
-    private GymBranch branch;
+    // Removed GymBranch reference
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "area_id", nullable = false)
-    private GymArea area;
+    // Removed GymArea reference
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id", nullable = false)
@@ -57,28 +53,34 @@ public class ClassSchedule {
     @Column(name = "current_bookings", nullable = false)
     private Integer currentBookings = 0;
     
-    @Column(name = "is_recurring", nullable = false)
-    private Boolean isRecurring = false;
-    
-    @Column(name = "recurrence_pattern")
-    private String recurrencePattern;
+    @Column(name = "room_number")
+    private String roomNumber;
     
     @Enumerated(EnumType.STRING)
-    @Column(name = "day_of_week")
+    @Column(name = "day_of_week", nullable = false)
     private DayOfWeek dayOfWeek;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private ClassStatus status = ClassStatus.SCHEDULED;
+    private ClassStatus status = ClassStatus.ACTIVE;
     
-    @Column(name = "notes")
-    private String notes;
+    @Column(name = "is_recurring", nullable = false)
+    private boolean isRecurring = false;
+    
+    @Column(name = "recurrence_pattern")
+    private String recurrencePattern;
+    
+    @Column(name = "special_instructions")
+    private String specialInstructions;
     
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
     
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
+    
+    @Column(name = "location_description")
+    private String locationDescription;
     
     // Enum for day of week
     public enum DayOfWeek {
@@ -87,6 +89,6 @@ public class ClassSchedule {
     
     // Enum for class status
     public enum ClassStatus {
-        SCHEDULED, CANCELLED, COMPLETED
+        ACTIVE, CANCELLED, COMPLETED, FULL
     }
 }
