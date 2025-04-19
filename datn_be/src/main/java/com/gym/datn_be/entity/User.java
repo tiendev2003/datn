@@ -18,6 +18,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -68,12 +70,22 @@ public class User {
 
     @Column(name = "registration_date", nullable = false)
     private LocalDateTime registrationDate = LocalDateTime.now();
+    
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+    
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
+    
+    // Adding active field to support queries that reference 'active' instead of 'isActive'
+    @Column(name = "is_active", insertable = false, updatable = false)
+    private boolean active = true;
     
     @Column(name = "is_email_verified", nullable = false)
     private boolean isEmailVerified = false;
@@ -152,5 +164,17 @@ public class User {
             this.accountLockedUntil = null;
             this.failedLoginAttempts = 0;
         }
+    }
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+        registrationDate = createdAt; // Keep registrationDate in sync with createdAt
+    }
+    
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

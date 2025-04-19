@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông Báo Hoàn Thành Gói PT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #27ae60;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 1px solid #dddddd;
+            border-right: 1px solid #dddddd;
+        }
+        .success-box {
+            background-color: #d4edda;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .detail-box {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .detail-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .detail-label {
+            font-weight: bold;
+            width: 150px;
+        }
+        .detail-value {
+            flex-grow: 1;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #666666;
+            border: 1px solid #dddddd;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Thông Báo Hoàn Thành Gói PT</h1>
+    </div>
+    <div class="content">
+        <p>Xin chào <strong th:text="${name}">Tên Khách Hàng</strong>,</p>
+        
+        <p>Chúng tôi xin chúc mừng bạn đã hoàn thành thành công toàn bộ buổi tập trong gói PT của mình!</p>
+        
+        <div class="success-box">
+            <p><strong>Chúc mừng!</strong> Bạn đã đạt được một cột mốc quan trọng trong hành trình tập luyện của mình.</p>
+        </div>
+        
+        <div class="detail-box">
+            <h3>Chi tiết gói PT đã hoàn thành:</h3>
+            <div class="detail-row">
+                <div class="detail-label">Tên gói:</div>
+                <div class="detail-value" th:text="${packageName}">Gói PT Tiêu Chuẩn</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Huấn luyện viên:</div>
+                <div class="detail-value" th:text="${trainerName}">Nguyễn Văn A</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Thời gian hoàn thành:</div>
+                <div class="detail-value" th:text="${completionTime}">01/01/2025 12:00:00</div>
+            </div>
+        </div>
+        
+        <p>Đây là một thành tựu đáng tự hào và chúng tôi hy vọng bạn đã đạt được những mục tiêu tập luyện của mình. Để tiếp tục hành trình này, bạn có thể đăng ký gói PT mới hoặc tham khảo các chương trình tập luyện khác tại phòng tập của chúng tôi.</p>
+        
+        <p>Huấn luyện viên <strong th:text="${trainerName}">Nguyễn Văn A</strong> và đội ngũ của chúng tôi luôn sẵn sàng hỗ trợ bạn trong các bước tiếp theo của hành trình tập luyện.</p>
+        
+        <p>Trân trọng,</p>
+        <p>Đội ngũ <span th:text="${appName}">Gym Management</span></p>
+    </div>
+    <div class="footer">
+        <p>Email này được gửi tự động, vui lòng không trả lời. Nếu bạn cần hỗ trợ, vui lòng liên hệ qua trang hỗ trợ của chúng tôi.</p>
+        <p>&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> <span th:text="${appName}">Gym Management</span>. Tất cả các quyền được bảo lưu.</p>
+    </div>
+</body>
+</html>

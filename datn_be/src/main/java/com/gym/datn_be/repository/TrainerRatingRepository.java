@@ -1,26 +1,22 @@
 package com.gym.datn_be.repository;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.gym.datn_be.entity.TrainerProfile;
 import com.gym.datn_be.entity.TrainerRating;
-import com.gym.datn_be.entity.User;
 
 @Repository
 public interface TrainerRatingRepository extends JpaRepository<TrainerRating, Long> {
-    List<TrainerRating> findByUser(User user);
-    List<TrainerRating> findByTrainer(TrainerProfile trainer);
-    List<TrainerRating> findByRatingGreaterThanEqual(int minRating);
-    List<TrainerRating> findByRatingLessThanEqual(int maxRating);
+
+    Page<TrainerRating> findByTrainerTrainerId(Long trainerId, Pageable pageable);
     
-    @Query("SELECT AVG(tr.rating) FROM TrainerRating tr WHERE tr.trainer = ?1")
-    Double findAverageRatingByTrainer(TrainerProfile trainer);
+    @Query("SELECT AVG(tr.rating) FROM TrainerRating tr WHERE tr.trainer.trainerId = :trainerId")
+    Double findAverageRatingByTrainerId(@Param("trainerId") Long trainerId);
     
-    @Query("SELECT tr FROM TrainerRating tr WHERE tr.createdAt BETWEEN ?1 AND ?2")
-    List<TrainerRating> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
+    @Query("SELECT COUNT(tr) FROM TrainerRating tr WHERE tr.trainer.trainerId = :trainerId")
+    Integer countByTrainerId(@Param("trainerId") Long trainerId);
 }

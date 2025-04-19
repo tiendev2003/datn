@@ -20,10 +20,4 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     
     @Query("SELECT f FROM Feedback f WHERE f.createdAt BETWEEN ?1 AND ?2")
     List<Feedback> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
-    
-    @Query("SELECT f FROM Feedback f WHERE f.branchLocation = ?1 AND f.status = ?2")
-    List<Feedback> findByBranchLocationAndStatus(String branchLocation, FeedbackStatus status);
-    
-    @Query("SELECT f FROM Feedback f WHERE f.branchLocation = ?1 AND f.createdAt BETWEEN ?2 AND ?3")
-    List<Feedback> findByBranchLocationAndCreatedAtBetween(String branchLocation, LocalDateTime start, LocalDateTime end);
 }

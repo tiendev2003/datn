@@ -22,8 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DataInitializer {
 
-    private final RoleRepository roleRepository;
-    private final PermissionRepository permissionRepository;
+    private RoleRepository roleRepository;
+    private PermissionRepository permissionRepository;
 
     @PostConstruct
     @Transactional
@@ -40,8 +40,7 @@ public class DataInitializer {
                 "MEMBER_READ", "MEMBER_CREATE", "MEMBER_UPDATE", "MEMBER_DELETE",
                 "TRAINER_READ", "TRAINER_CREATE", "TRAINER_UPDATE", "TRAINER_DELETE",
                 "CLASS_READ", "CLASS_CREATE", "CLASS_UPDATE", "CLASS_DELETE",
-                "BOOKING_READ", "BOOKING_CREATE", "BOOKING_UPDATE", "BOOKING_DELETE"
-        );
+                "BOOKING_READ", "BOOKING_CREATE", "BOOKING_UPDATE", "BOOKING_DELETE");
 
         Set<Permission> adminPermissions = new HashSet<>();
         Set<Permission> managerPermissions = new HashSet<>();
@@ -59,26 +58,26 @@ public class DataInitializer {
 
             // Add to respective permission sets
             adminPermissions.add(permission);
-            
-            if (permName.startsWith("USER_READ") || 
-                permName.startsWith("MEMBER") || 
-                permName.startsWith("TRAINER") || 
-                permName.startsWith("CLASS") || 
-                permName.startsWith("BOOKING")) {
+
+            if (permName.startsWith("USER_READ") ||
+                    permName.startsWith("MEMBER") ||
+                    permName.startsWith("TRAINER") ||
+                    permName.startsWith("CLASS") ||
+                    permName.startsWith("BOOKING")) {
                 managerPermissions.add(permission);
             }
-            
-            if (permName.startsWith("MEMBER_READ") || 
-                permName.startsWith("CLASS_READ") || 
-                permName.startsWith("BOOKING") ||
-                permName.equals("TRAINER_READ")) {
+
+            if (permName.startsWith("MEMBER_READ") ||
+                    permName.startsWith("CLASS_READ") ||
+                    permName.startsWith("BOOKING") ||
+                    permName.equals("TRAINER_READ")) {
                 trainerPermissions.add(permission);
             }
-            
-            if (permName.equals("MEMBER_READ") || 
-                permName.equals("CLASS_READ") || 
-                permName.equals("BOOKING_READ") || 
-                permName.equals("BOOKING_CREATE")) {
+
+            if (permName.equals("MEMBER_READ") ||
+                    permName.equals("CLASS_READ") ||
+                    permName.equals("BOOKING_READ") ||
+                    permName.equals("BOOKING_CREATE")) {
                 memberPermissions.add(permission);
             }
         }

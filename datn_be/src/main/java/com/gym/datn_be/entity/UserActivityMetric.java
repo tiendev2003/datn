@@ -46,9 +46,6 @@ public class UserActivityMetric {
     @Column(name = "pt_sessions", nullable = false)
     private Integer ptSessions = 0;
 
-    @Column(name = "areas_used")
-    private String areasUsed; // Comma-separated IDs
-
     @Column(name = "last_updated", nullable = false)
     private LocalDateTime lastUpdated = LocalDateTime.now();
 }

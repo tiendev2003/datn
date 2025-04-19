@@ -43,9 +43,6 @@ public class MembershipType {
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Column(name = "discount_percentage", precision = 5, scale = 2)
-    private BigDecimal discountPercentage = BigDecimal.ZERO;
-
     @Column(name = "max_freeze_days")
     private Integer maxFreezeDays = 0;
 

@@ -46,9 +46,6 @@ public class Feedback {
     @Column(name = "rating")
     private Integer rating;
     
-    @Column(name = "branch_location")
-    private String branchLocation;
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
     private TrainerProfile trainer;
@@ -79,7 +76,7 @@ public class Feedback {
     
     // Enum for feedback type
     public enum FeedbackType {
-        GENERAL, FACILITY, CLASS, TRAINER, STAFF, OTHER
+        GENERAL, CLASS, TRAINER, STAFF, OTHER
     }
     
     // Enum for feedback status

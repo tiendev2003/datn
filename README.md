@@ -39,7 +39,6 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 - Đăng nhập và quản lý tài khoản cá nhân: Cho phép người dùng đăng nhập an toàn, cập nhật thông tin cá nhân, thay đổi mật khẩu và quản lý các cài đặt riêng tư.
 - Đặt lịch với huấn luyện viên: Cho phép chọn huấn luyện viên, xem lịch rảnh và đặt buổi tập cá nhân theo thời gian phù hợp.
 - Đăng ký tham gia tập chung với người khác.
-- Xem lịch sử tập luyện: Hiển thị thông tin chi tiết về các buổi tập đã hoàn thành, thời gian, khu vực/thiết bị đã sử dụng.
 - Theo dõi tiến trình cá nhân: Hiển thị biểu đồ, thống kê về tiến độ tập luyện theo thời gian, bao gồm các chỉ số đo lường.
 - Nhận thông báo về lịch đặt, thay đổi lịch: Hệ thống gửi thông báo qua email, SMS hoặc push notification về lịch đặt và cập nhật lịch.
 - Mua và gia hạn gói tập trực tuyến: Cho phép người dùng xem, mua mới hoặc gia hạn các gói tập với thanh toán trực tuyến qua các phương thức thanh toán phổ biến.
@@ -132,21 +131,9 @@ Dự án hướng đến việc xây dựng một hệ thống quản lý toàn 
 - Mã hóa dữ liệu nhạy cảm: Áp dụng các thuật toán mã hóa mạnh cho dữ liệu cá nhân, thông tin thanh toán và mật khẩu người dùng.
 - Quản lý phiên đăng nhập: Theo dõi phiên đăng nhập, tự động đăng xuất sau thời gian không hoạt động, khóa tài khoản sau nhiều lần đăng nhập sai.
 - Nhật ký hoạt động hệ thống: Ghi lại đầy đủ các thao tác quan trọng trên hệ thống, phát hiện và cảnh báo các hoạt động bất thường.
-
-## Yêu Cầu Phi Chức Năng
-
-### Hiệu Suất
-- Thời gian phản hồi nhanh (dưới 2 giây): Đảm bảo thời gian phản hồi của hệ thống không quá 2 giây cho mọi thao tác thông thường, tạo trải nghiệm mượt mà.
-- Khả năng xử lý đồng thời nhiều người dùng: Hệ thống có thể xử lý ít nhất 100 người dùng đồng thời mà không bị suy giảm hiệu suất.
-- Tối ưu hóa cho thiết bị di động: Giao diện và tính năng được thiết kế để hoạt động hiệu quả trên thiết bị di động với băng thông và tài nguyên hạn chế.
-
-### Độ Tin Cậy
-- Hệ thống hoạt động 24/7: Đảm bảo tính sẵn sàng cao, thời gian ngừng hoạt động không vượt quá 0.1% (khoảng 8.7 giờ/năm).
-- Tự động sao lưu dữ liệu: Thực hiện sao lưu dữ liệu tự động hàng ngày với khả năng khôi phục điểm sao lưu (point-in-time recovery).
-- Khôi phục sau sự cố: Có quy trình và công cụ để khôi phục hệ thống nhanh chóng sau sự cố, với thời gian khôi phục mục tiêu (RTO) dưới 1 giờ.
+ 
 
 ### Khả Năng Mở Rộng
-- Hỗ trợ thêm chi nhánh phòng gym: Thiết kế cho phép dễ dàng thêm mới các chi nhánh phòng gym với cấu hình riêng và quản lý tập trung.
 - Tích hợp với các hệ thống bên thứ ba: Cung cấp API và webhook cho phép kết nối với các ứng dụng theo dõi sức khỏe, hệ thống thanh toán và phần mềm kế toán.
 - Khả năng thêm tính năng mới: Kiến trúc module hóa cho phép thêm tính năng mới mà không ảnh hưởng đến các phần khác của hệ thống.
 

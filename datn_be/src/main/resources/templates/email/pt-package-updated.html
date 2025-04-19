@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông Báo Cập Nhật Gói PT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #3498db;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 1px solid #dddddd;
+            border-right: 1px solid #dddddd;
+        }
+        .info-box {
+            background-color: #d1ecf1;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .detail-box {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .detail-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        .detail-label {
+            font-weight: bold;
+            width: 170px;
+        }
+        .detail-value {
+            flex-grow: 1;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #666666;
+            border: 1px solid #dddddd;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Thông Báo Cập Nhật Gói PT</h1>
+    </div>
+    <div class="content">
+        <p>Xin chào <strong th:text="${name}">Tên Khách Hàng</strong>,</p>
+        
+        <p>Chúng tôi xin thông báo rằng gói PT của bạn đã được cập nhật thành công.</p>
+        
+        <div class="info-box">
+            <p><strong>Cập nhật:</strong> <span th:if="${addedType == 'buổi tập'}">Đã thêm <strong th:text="${addedAmount}">5</strong> buổi tập vào gói PT của bạn.</span>
+            <span th:if="${addedType == 'ngày'}">Đã gia hạn thêm <strong th:text="${addedAmount}">30</strong> ngày cho gói PT của bạn.</span></p>
+        </div>
+        
+        <div class="detail-box">
+            <h3>Chi tiết gói PT sau khi cập nhật:</h3>
+            <div class="detail-row">
+                <div class="detail-label">Tên gói:</div>
+                <div class="detail-value" th:text="${packageName}">Gói PT Tiêu Chuẩn</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Buổi tập còn lại:</div>
+                <div class="detail-value" th:text="${remainingSessions}">15</div>
+            </div>
+            <div th:if="${oldEndDate != null and newEndDate != null}">
+                <div class="detail-row">
+                    <div class="detail-label">Ngày hết hạn cũ:</div>
+                    <div class="detail-value" th:text="${oldEndDate}">01/01/2025</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Ngày hết hạn mới:</div>
+                    <div class="detail-value" th:text="${newEndDate}">01/02/2025</div>
+                </div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Thời gian cập nhật:</div>
+                <div class="detail-value" th:text="${updateTime}">01/01/2025 12:00:00</div>
+            </div>
+            <div class="detail-row">
+                <div class="detail-label">Lý do:</div>
+                <div class="detail-value" th:text="${reason}">Khuyến mãi thành viên thân thiết</div>
+            </div>
+        </div>
+        
+        <p>Bạn có thể kiểm tra chi tiết gói PT trong phần "Gói PT của tôi" trên trang web hoặc ứng dụng của chúng tôi.</p>
+        
+        <p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với bộ phận chăm sóc khách hàng hoặc huấn luyện viên của bạn.</p>
+        
+        <p>Chúc bạn có những buổi tập hiệu quả!</p>
+        
+        <p>Trân trọng,</p>
+        <p>Đội ngũ <span th:text="${appName}">Gym Management</span></p>
+    </div>
+    <div class="footer">
+        <p>Email này được gửi tự động, vui lòng không trả lời. Nếu bạn cần hỗ trợ, vui lòng liên hệ qua trang hỗ trợ của chúng tôi.</p>
+        <p>&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> <span th:text="${appName}">Gym Management</span>. Tất cả các quyền được bảo lưu.</p>
+    </div>
+</body>
+</html>

@@ -34,6 +34,10 @@ public class Role {
 
     @Column(name = "role_name", unique = true, nullable = false, length = 50)
     private String roleName;
+    
+    // Adding name field to support queries that reference 'name' instead of 'roleName'
+    @Column(name = "role_name", insertable = false, updatable = false)
+    private String name;
 
     @Column(name = "description")
     private String description;
