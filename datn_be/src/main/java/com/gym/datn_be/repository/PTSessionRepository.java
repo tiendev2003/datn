@@ -29,11 +29,10 @@ public interface PTSessionRepository extends JpaRepository<PTSession, Long>, Jpa
      * Tìm buổi tập gần nhất đã hoàn thành
      * 
      * @param userPackage Gói PT người dùng
-     * @param completed Đã hoàn thành hay chưa
      * @return Buổi tập gần nhất đã hoàn thành
      */
     @Query("SELECT s FROM PTSession s JOIN s.booking b WHERE s.userPackage = :userPackage AND b.status = 'COMPLETED' ORDER BY b.endDateTime DESC")
-    PTSession findTopByUserPackageAndCompletedOrderByEndDateTimeDesc(@Param("userPackage") UserPTPackage userPackage, @Param("completed") boolean completed);
+    PTSession findTopByUserPackageAndCompletedOrderByEndDateTimeDesc(@Param("userPackage") UserPTPackage userPackage);
     
     /**
      * Tìm buổi tập tiếp theo theo trạng thái
@@ -87,5 +86,46 @@ public interface PTSessionRepository extends JpaRepository<PTSession, Long>, Jpa
             @Param("trainerId") Long trainerId, 
             @Param("status") BookingStatus status,
             @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate);
+    
+    /**
+     * Đếm số buổi tập được lên lịch trong khoảng thời gian
+     * 
+     * @param startDate Ngày bắt đầu
+     * @param endDate Ngày kết thúc
+     * @return Số buổi tập
+     */
+    @Query("SELECT COUNT(s) FROM PTSession s " +
+           "WHERE s.booking.startDateTime BETWEEN :startDate AND :endDate")
+    Integer countSessionsScheduledBetweenDates(
+            @Param("startDate") LocalDateTime startDate, 
+            @Param("endDate") LocalDateTime endDate);
+    
+    /**
+     * Đếm số buổi tập đã hoàn thành trong khoảng thời gian
+     * 
+     * @param startDate Ngày bắt đầu
+     * @param endDate Ngày kết thúc
+     * @return Số buổi tập
+     */
+    @Query("SELECT COUNT(s) FROM PTSession s " +
+           "WHERE s.booking.startDateTime BETWEEN :startDate AND :endDate " +
+           "AND s.booking.status = com.gym.datn_be.entity.Booking.BookingStatus.COMPLETED")
+    Integer countSessionsCompletedBetweenDates(
+            @Param("startDate") LocalDateTime startDate, 
+            @Param("endDate") LocalDateTime endDate);
+    
+    /**
+     * Đếm số buổi tập đã hủy trong khoảng thời gian
+     * 
+     * @param startDate Ngày bắt đầu
+     * @param endDate Ngày kết thúc
+     * @return Số buổi tập
+     */
+    @Query("SELECT COUNT(s) FROM PTSession s " +
+           "WHERE s.booking.startDateTime BETWEEN :startDate AND :endDate " +
+           "AND s.booking.status = com.gym.datn_be.entity.Booking.BookingStatus.CANCELLED")
+    Integer countSessionsCancelledBetweenDates(
+            @Param("startDate") LocalDateTime startDate, 
             @Param("endDate") LocalDateTime endDate);
 }

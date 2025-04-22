@@ -1,5 +1,6 @@
 package com.gym.datn_be.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import com.gym.datn_be.dto.response.PTPackageDetailResponse;
 import com.gym.datn_be.dto.response.PTPackageHistoryResponse;
 import com.gym.datn_be.dto.response.PTPackageResponse;
 import com.gym.datn_be.dto.response.PTPackageStatsResponse;
+import com.gym.datn_be.dto.response.PTRevenueReportResponse;
 import com.gym.datn_be.dto.response.UserPTPackageResponse;
 
 public interface PTPackageManagementService {
@@ -35,6 +37,9 @@ public interface PTPackageManagementService {
     
     // Thống kê gói PT
     PTPackageStatsResponse getPTPackageStatistics(String startDate, String endDate);
+    
+    // Báo cáo doanh thu từ gói PT
+    List<PTRevenueReportResponse> generateRevenueReport(LocalDate startDate, LocalDate endDate);
     
     // Tìm kiếm nâng cao
     Page<UserPTPackageResponse> searchUserPTPackages(UserPTPackageFilterRequest request, Pageable pageable);

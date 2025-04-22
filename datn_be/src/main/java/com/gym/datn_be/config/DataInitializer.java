@@ -22,13 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DataInitializer {
 
-    private RoleRepository roleRepository;
-    private PermissionRepository permissionRepository;
+    private final RoleRepository roleRepository;
+    private final PermissionRepository permissionRepository;
 
     @PostConstruct
     @Transactional
     public void init() {
-        // initRolesAndPermissions();
+        initRolesAndPermissions();
     }
 
     private void initRolesAndPermissions() {

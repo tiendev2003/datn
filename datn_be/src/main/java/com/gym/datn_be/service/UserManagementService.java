@@ -208,7 +208,7 @@ public class UserManagementService {
         userRepository.save(user);
 
         // Cập nhật hồ sơ người dùng nếu có
-        Optional<UserProfile> profileOpt = userProfileRepository.findByUserId(userId);
+        Optional<UserProfile> profileOpt = userProfileRepository.findByUserUserId(userId);
         UserProfile profile;
 
         if (profileOpt.isPresent()) {
@@ -248,8 +248,8 @@ public class UserManagementService {
         }
 
         // Xóa các liên kết trước (các bảng liên quan đến người dùng)
-        userRoleRepository.deleteByUserId(userId);
-        userProfileRepository.deleteByUserId(userId);
+        userRoleRepository.deleteByUserUserId(userId);
+        userProfileRepository.deleteByUserUserId(userId);
 
         // Xóa người dùng
         userRepository.deleteById(userId);
@@ -295,7 +295,7 @@ public class UserManagementService {
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy người dùng với ID: " + userId));
 
         // Xóa tất cả vai trò hiện tại
-        userRoleRepository.deleteByUserId(userId);
+        userRoleRepository.deleteByUserUserId(userId);
 
         // Thêm các vai trò mới
         List<UserRole> newRoles = new ArrayList<>();
@@ -328,7 +328,7 @@ public class UserManagementService {
         response.setLastLogin(user.getLastLogin());
 
         // Lấy danh sách vai trò
-        List<String> roles = userRoleRepository.findByUserId(user.getUserId()).stream()
+        List<String> roles = userRoleRepository.findByUserUserId(user.getUserId()).stream()
                 .map(userRole -> userRole.getRole().getRoleName())
                 .collect(Collectors.toList());
 
@@ -357,7 +357,7 @@ public class UserManagementService {
         response.setTwoFactorEnabled(user.isTwoFactorEnabled());  // Sử dụng isTwoFactorEnabled()
 
         // Lấy thông tin hồ sơ người dùng
-        userProfileRepository.findByUserId(user.getUserId()).ifPresent(profile -> {
+        userProfileRepository.findByUserUserId(user.getUserId()).ifPresent(profile -> {
             response.setHeight(profile.getHeight());
             response.setWeight(profile.getWeight());
             response.setEmergencyContactName(profile.getEmergencyContactName());
@@ -368,7 +368,7 @@ public class UserManagementService {
         });
 
         // Lấy danh sách vai trò
-        List<String> roles = userRoleRepository.findByUserId(user.getUserId()).stream()
+        List<String> roles = userRoleRepository.findByUserUserId(user.getUserId()).stream()
                 .map(userRole -> userRole.getRole().getRoleName())
                 .collect(Collectors.toList());
 

@@ -29,5 +29,5 @@ public interface TrainerRepository extends JpaRepository<TrainerProfile, Long> {
     @Query("SELECT COUNT(tp) FROM TrainerProfile tp WHERE tp.user.userId = :userId")
     long countByUserId(@Param("userId") Long userId);
     
-    TrainerProfile findByUserId(Long userId);
+    TrainerProfile findByUserUserId(Long userId);
 }

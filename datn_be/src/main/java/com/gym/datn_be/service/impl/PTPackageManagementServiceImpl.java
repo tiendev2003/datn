@@ -1,10 +1,12 @@
 package com.gym.datn_be.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,7 @@ import com.gym.datn_be.dto.response.PTPackageDetailResponse;
 import com.gym.datn_be.dto.response.PTPackageHistoryResponse;
 import com.gym.datn_be.dto.response.PTPackageResponse;
 import com.gym.datn_be.dto.response.PTPackageStatsResponse;
+import com.gym.datn_be.dto.response.PTRevenueReportResponse;
 import com.gym.datn_be.dto.response.UserPTPackageResponse;
 import com.gym.datn_be.entity.PTPackage;
 import com.gym.datn_be.entity.PTSession;
@@ -36,20 +39,13 @@ import com.gym.datn_be.exception.BadRequestException;
 import com.gym.datn_be.exception.ResourceNotFoundException;
 import com.gym.datn_be.repository.PTPackageRepository;
 import com.gym.datn_be.repository.PTSessionRepository;
-import com.gym.datn_be.repository.TrainerProfileRepository;
 import com.gym.datn_be.repository.UserPTPackageRepository;
-import com.gym.datn_be.repository.UserRepository;
 import com.gym.datn_be.service.EmailService;
 import com.gym.datn_be.service.NotificationService;
 import com.gym.datn_be.service.PTPackageManagementService;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,14 +56,9 @@ public class PTPackageManagementServiceImpl implements PTPackageManagementServic
 
     private final PTPackageRepository ptPackageRepository;
     private final UserPTPackageRepository userPTPackageRepository;
-    private final TrainerProfileRepository trainerProfileRepository;
-    private final UserRepository userRepository;
     private final PTSessionRepository ptSessionRepository;
     private final EmailService emailService;
     private final NotificationService notificationService;
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Override
     public List<PTPackageResponse> getAllPTPackages() {
@@ -403,7 +394,7 @@ public class PTPackageManagementServiceImpl implements PTPackageManagementServic
                 : allPackages.stream()
                         .map(PTPackage::getPrice)
                         .reduce(BigDecimal.ZERO, BigDecimal::add)
-                        .divide(BigDecimal.valueOf(allPackages.size()), 2, BigDecimal.ROUND_HALF_UP));
+                        .divide(BigDecimal.valueOf(allPackages.size()), 2, RoundingMode.HALF_UP));
 
         response.setHighestPackagePrice(allPackages.isEmpty() ? BigDecimal.ZERO
                 : allPackages.stream()
@@ -664,6 +655,105 @@ public class PTPackageManagementServiceImpl implements PTPackageManagementServic
         return expiringPackages.size();
     }
 
+    @Override
+    public List<PTRevenueReportResponse> generateRevenueReport(LocalDate startDate, LocalDate endDate) {
+        log.info("Generating revenue report from {} to {}", startDate, endDate);
+        
+        // Tạo đối tượng response chứa dữ liệu báo cáo
+        PTRevenueReportResponse report = new PTRevenueReportResponse();
+        report.setStartDate(startDate);
+        report.setEndDate(endDate);
+        
+        // Lấy tổng doanh thu trong khoảng thời gian
+        BigDecimal totalRevenueRaw = userPTPackageRepository.calculateTotalRevenueBetweenDates(
+            startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
+        BigDecimal totalRevenue = totalRevenueRaw != null ? totalRevenueRaw : BigDecimal.ZERO;
+        report.setTotalRevenue(totalRevenue);
+        
+        // Lấy tổng số gói bán được
+        Integer totalPackagesSold = userPTPackageRepository.countPackagesSoldBetweenDates(
+            startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
+        report.setTotalPackagesSold(totalPackagesSold != null ? totalPackagesSold : 0);
+        
+        // Lấy tổng số buổi tập đã lên lịch
+        Integer totalSessionsScheduledRaw = ptSessionRepository.countSessionsScheduledBetweenDates(
+            startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
+        int totalSessionsScheduled = totalSessionsScheduledRaw != null ? totalSessionsScheduledRaw : 0;
+        report.setTotalSessionsScheduled(totalSessionsScheduled);
+        
+        // Lấy tổng số buổi tập đã hoàn thành
+        Integer totalSessionsCompletedRaw = ptSessionRepository.countSessionsCompletedBetweenDates(
+            startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
+        int totalSessionsCompleted = totalSessionsCompletedRaw != null ? totalSessionsCompletedRaw : 0;
+        report.setTotalSessionsCompleted(totalSessionsCompleted);
+        
+        // Lấy tổng số buổi tập đã bị hủy
+        Integer totalSessionsCancelledRaw = ptSessionRepository.countSessionsCancelledBetweenDates(
+            startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
+        int totalSessionsCancelled = totalSessionsCancelledRaw != null ? totalSessionsCancelledRaw : 0;
+        report.setTotalSessionsCancelled(totalSessionsCancelled);
+        
+        // Tính tỷ lệ hoàn thành và hủy buổi tập
+        if (totalSessionsScheduled > 0) {
+            report.setCompletionRate(calculatePercentage(totalSessionsCompleted, totalSessionsScheduled));
+            report.setCancellationRate(calculatePercentage(totalSessionsCancelled, totalSessionsScheduled));
+        } else {
+            report.setCompletionRate(0.0);
+            report.setCancellationRate(0.0);
+        }
+        
+        // Lấy doanh thu theo huấn luyện viên
+        Map<String, BigDecimal> revenueByTrainer = userPTPackageRepository.calculateRevenueByTrainerBetweenDates(
+            startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
+        report.setRevenueByTrainer(revenueByTrainer != null ? revenueByTrainer : new HashMap<>());
+        
+        // Lấy doanh thu theo loại gói PT
+        Map<String, BigDecimal> revenueByPackage = userPTPackageRepository.calculateRevenueByPackageTypeBetweenDates(
+            startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
+        report.setRevenueByPackage(revenueByPackage != null ? revenueByPackage : new HashMap<>());
+        
+        // Lấy doanh thu theo ngày
+        Map<String, BigDecimal> revenueByDay = userPTPackageRepository.calculateRevenueByDayBetweenDates(
+            startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
+        report.setRevenueByDay(revenueByDay != null ? revenueByDay : new HashMap<>());
+        
+        // Lấy doanh thu theo tháng
+        Map<String, BigDecimal> revenueByMonth = userPTPackageRepository.calculateRevenueByMonthBetweenDates(
+            startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
+        report.setRevenueByMonth(revenueByMonth != null ? revenueByMonth : new HashMap<>());
+        
+        // Lấy chi tiết doanh thu theo từng loại gói
+        List<PTRevenueReportResponse.PackageRevenueDetail> packageDetails = 
+            userPTPackageRepository.getPackageRevenueDetailsBetweenDates(
+                startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
+        
+        if (packageDetails != null) {
+            // Tính phần trăm đóng góp vào tổng doanh thu cho mỗi loại gói
+            for (PTRevenueReportResponse.PackageRevenueDetail detail : packageDetails) {
+                if (totalRevenue.compareTo(BigDecimal.ZERO) > 0) {
+                    double percentage = detail.getRevenue().multiply(new BigDecimal("100"))
+                        .divide(totalRevenue, 2, RoundingMode.HALF_UP)
+                        .doubleValue();
+                    detail.setPercentageOfTotalRevenue(percentage);
+                } else {
+                    detail.setPercentageOfTotalRevenue(0.0);
+                }
+            }
+        }
+        
+        report.setPackageDetails(packageDetails != null ? packageDetails : new ArrayList<>());
+        
+        return Collections.singletonList(report);
+    }
+
+    /**
+     * Phương thức hỗ trợ để tính phần trăm
+     */
+    private double calculatePercentage(int value, int total) {
+        if (total == 0) return 0.0;
+        return Math.round(((double) value / total) * 100 * 100.0) / 100.0;
+    }
+
     // Các phương thức hỗ trợ
 
     private PTPackageResponse convertToResponse(PTPackage ptPackage) {
@@ -772,7 +862,7 @@ public class PTPackageManagementServiceImpl implements PTPackageManagementServic
     private void addSessionInfo(UserPTPackage userPackage, UserPTPackageResponse response) {
         // Lấy thông tin buổi tập gần nhất đã hoàn thành
         PTSession lastSession = ptSessionRepository.findTopByUserPackageAndCompletedOrderByEndDateTimeDesc(
-                userPackage, true);
+                userPackage);
 
         if (lastSession != null) {
             response.setLastSessionDate(lastSession.getBooking().getEndDateTime());

@@ -9,6 +9,6 @@ import com.gym.datn_be.entity.UserRole;
 
 @Repository
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
-    List<UserRole> findByUserId(Long userId);
-    void deleteByUserId(Long userId);
+    List<UserRole> findByUserUserId(Long userId);
+    void deleteByUserUserId(Long userId);
 }

@@ -14,6 +14,6 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, Long> 
     Optional<UserProfile> findByUser(User user);
     List<UserProfile> findByNameContainingIgnoreCase(String name);
     List<UserProfile> findByEmergencyContactPhone(String emergencyContactPhone);
-    Optional<UserProfile> findByUserId(Long userId);
-    void deleteByUserId(Long userId);
+    Optional<UserProfile> findByUserUserId(Long userId);
+    void deleteByUserUserId(Long userId);
 }

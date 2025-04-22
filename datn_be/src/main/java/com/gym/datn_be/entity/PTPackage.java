@@ -43,6 +43,9 @@ public class PTPackage {
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
+    @Column(name = "discount_percentage", precision = 5, scale = 2)
+    private BigDecimal discountPercentage;
+
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
 
