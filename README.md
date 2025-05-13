@@ -4,9 +4,10 @@
 
 ### 1.1. Khách Vãng Lai
 - **Xem thông tin phòng gym**: Giờ hoạt động, địa chỉ, thông tin liên hệ, cơ sở vật chất (hình ảnh, video).
+- **Xem danh sách pt**:   Thông tin cá nhân, lịch làm việc, đánh giá từ học viên.
 - **Xem danh sách gói tập**: Gym, Yoga, Zumba, v.v. (giá, thời hạn, quyền lợi).
 - **Đăng ký tài khoản**: Tạo tài khoản với email, số điện thoại.
-- **Liên hệ**: Form liên hệ hoặc chatbot.
+- **Liên hệ**: Form liên hệ 
 
 ### 1.2. Khách Hàng (Hội Viên)
 - **Đăng ký và thanh toán gói tập**: Chọn gói, thanh toán online (MoMo, ZaloPay, v.v.), nhận email hóa đơn.
@@ -14,6 +15,7 @@
 - **Đặt lịch tập với PT**: Xem lịch trống, đặt lịch cá nhân hoặc nhóm, nhận email xác nhận.
 - **Đánh giá PT**: Gửi đánh giá hoặc phản hồi.
 - **Nhận thông báo**: Lịch nghỉ, sự kiện, khuyến mãi.
+
 
 ### 1.3. Huấn Luyện Viên (PT)
 - **Quản lý lịch làm việc**: Cập nhật lịch trống, đánh dấu ngày nghỉ.

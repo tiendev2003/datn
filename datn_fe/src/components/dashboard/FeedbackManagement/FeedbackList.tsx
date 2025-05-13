@@ -1,1 +1,0 @@
-// Feedback list component 

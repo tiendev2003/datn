@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="#e63946" rx="100" ry="100" />
-  <text x="256" y="256" font-family="Arial, sans-serif" font-size="200" text-anchor="middle" dominant-baseline="central" fill="white">FH</text>
-  <path d="M156 356 C 156 356, 256 300, 356 356" stroke="white" stroke-width="15" fill="none" />
-</svg>
