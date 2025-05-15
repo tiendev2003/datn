@@ -1,0 +1,71 @@
+/* 
+ * This file contains responsive utility classes and helpers
+ * for Tailwind v4 to ensure components work well together
+ */
+
+/* Responsive spacing utilities */
+@layer utilities {
+  /* Extra small devices (phones) */
+  @media (max-width: 639px) {
+    .xs-only\:p-0 {
+      padding: 0;
+    }
+    .xs-only\:m-0 {
+      margin: 0;
+    }
+    .xs-only\:hidden {
+      display: none;
+    }
+    .xs-only\:block {
+      display: block;
+    }
+    .xs-only\:flex {
+      display: flex;
+    }
+  }
+
+  /* Fix for grid overflow on mobile */
+  .mobile-grid-fix {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    overflow-x: hidden;
+  }
+}
+
+/* Common component fixes */
+@layer components {
+  /* Fix for nested grid layouts that might cause horizontal overflow */
+  .grid {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Better image handling in responsive layouts */
+  .responsive-img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Helper for responsive text */
+  .responsive-text {
+    font-size: clamp(0.875rem, 4vw, 1rem);
+    line-height: 1.5;
+  }
+  
+  /* Helper for making cards equal height */
+  .equal-height {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .equal-height-body {
+    flex: 1 1 auto;
+  }
+  
+  .equal-height-footer {
+    margin-top: auto;
+  }
+}

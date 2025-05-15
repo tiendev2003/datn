@@ -58,7 +58,7 @@ const SpecialOffer = () => {
 
   return (
     <section className="py-20 bg-gradient-to-r from-primary via-primary-dark to-secondary text-white">
-      <div className="container mx-auto px-4 md:px-0">
+      <div className="container">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <motion.div 
             initial={{ opacity: 0, x: -50 }}

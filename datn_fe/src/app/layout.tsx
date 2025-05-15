@@ -1,4 +1,3 @@
-import ClientScrollProgressBar from "@/components/ClientScrollProgressBar";
 import type { Metadata } from "next";
 import { Inter, Roboto } from "next/font/google";
 import "./globals.css";
@@ -26,11 +25,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi" className="scroll-smooth">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+      </head>
       <body
-        className={`${interFont.variable} ${robotoFont.variable} antialiased bg-white text-secondary`}
+        className={`${interFont.variable} ${robotoFont.variable} antialiased bg-white text-secondary overflow-x-hidden min-h-screen`}
         suppressHydrationWarning={true}
       >
-        <ClientScrollProgressBar />
+        {/* <ClientScrollProgressBar /> */}
         {children}
       </body>
     </html>

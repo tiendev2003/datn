@@ -32,7 +32,7 @@ const Contact = () => {
 
   return (
     <section id="contact" className="py-20 bg-white scroll-mt-20">
-      <div className="container mx-auto px-4 md:px-0">
+      <div className="container">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4">
             <span className="text-primary">Liên hệ</span> với chúng tôi

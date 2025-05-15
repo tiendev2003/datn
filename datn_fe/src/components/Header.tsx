@@ -139,7 +139,7 @@ const Header = () => {
         isScrolled ? 'bg-white shadow-sm' : 'bg-secondary'
       } transition-all duration-300`}
     >
-      <div className="container mx-auto flex justify-between items-center py-4 px-4 md:px-0">
+      <div className="container flex justify-between items-center py-4">
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
