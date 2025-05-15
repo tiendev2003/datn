@@ -1,5 +1,7 @@
 'use client';
 
+import { useAuth } from '@/context/AuthContext';
+import { isValidEmail } from '@/utils/auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -23,28 +25,54 @@ export default function Login() {
         });
     };
 
+    const { login } = useAuth();
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         setIsLoading(true);
         setError('');
 
-        // Here you would typically make an API call to authenticate the user
+        // Validate email format
+        if (!isValidEmail(formData.email)) {
+            setError('Địa chỉ email không hợp lệ.');
+            setIsLoading(false);
+            return;
+        }
+
         try {
-            // Simulate API call
-            setTimeout(() => {
-                console.log('Login data:', { ...formData, rememberMe });
-                // If login successful, redirect to home page
-                router.push('/');
-                setIsLoading(false);
-            }, 1000);
+            await login(formData.email, formData.password);
+            
+            // If remember me is checked, we could store additional data
+            if (rememberMe) {
+                localStorage.setItem('rememberedEmail', formData.email);
+            } else {
+                localStorage.removeItem('rememberedEmail');
+            }
+            
+            // Redirect to home page after successful login
+            router.push('/');
         } catch (err: any) {
-            setError('Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin.');
+            setError(err.message || 'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin.');
             setIsLoading(false);
         }
     };
 
     return (
-        <div className="flex h-screen">
+        <div className="min-h-screen flex flex-col md:flex-row">
+            {/* Mobile Header - Only visible on mobile */}
+            <div className="lg:hidden flex items-center justify-between bg-primary text-white p-4 shadow-md">
+                <div className="flex items-center space-x-2">
+                    <Image 
+                        src="/images/logo.png" 
+                        alt="Gym Logo" 
+                        width={40} 
+                        height={40}
+                    />
+                    <h2 className="font-bold text-xl">GYMMASTER</h2>
+                </div>
+                <h2 className="font-bold text-xl">ĐĂNG NHẬP</h2>
+            </div>
+
             {/* Left side - Image and logo */}
             <div className="hidden lg:flex lg:w-1/2 bg-primary relative">
                 <div className="absolute inset-0 bg-black opacity-20"></div>
@@ -71,23 +99,33 @@ export default function Login() {
             </div>
 
             {/* Right side - Login form */}
-            <div className="w-full lg:w-1/2 flex flex-col justify-center items-center bg-gray-50 px-6 py-12">
+            <div className="w-full lg:w-1/2 flex flex-col justify-start items-center bg-white px-4 sm:px-6 py-6 sm:py-8 overflow-y-auto">
+                {/* Website Name in Top Left Corner */}
+                <div className="self-start mb-6">
+                    <Link href="/" className="text-xl font-bold text-primary">
+                        GYM<span className="text-secondary">MASTER</span>
+                    </Link>
+                </div>
+                
                 <div className="w-full max-w-md">
-                    <div className="text-center mb-10">
-                        <h1 className="text-4xl font-bold text-gray-900 mb-2">Đăng Nhập</h1>
+                    <div className="text-center mb-6 sm:mb-10">
+                        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Đăng Nhập</h1>
                         <p className="text-gray-600">Chào mừng trở lại! Đăng nhập để tiếp tục</p>
                     </div>
 
                     {error && (
-                        <div className="mb-6 p-4 bg-red-100 border border-red-200 text-red-700 rounded-lg">
-                            {error}
+                        <div className="mb-6 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            <span>{error}</span>
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div>
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <div className="relative">
                             <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
-                                Email
+                                Email <span className="text-red-500">*</span>
                             </label>
                             <input
                                 type="email"
@@ -101,9 +139,9 @@ export default function Login() {
                             />
                         </div>
 
-                        <div>
+                        <div className="relative">
                             <label htmlFor="password" className="block text-gray-700 font-medium mb-2">
-                                Mật khẩu
+                                Mật khẩu <span className="text-red-500">*</span>
                             </label>
                             <input
                                 type="password"
@@ -117,14 +155,14 @@ export default function Login() {
                             />
                         </div>
 
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                             <div className="flex items-center">
                                 <input
                                     id="remember-me"
                                     type="checkbox"
                                     checked={rememberMe}
                                     onChange={() => setRememberMe(!rememberMe)}
-                                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                                    className="h-5 w-5 text-primary focus:ring-primary border-gray-300 rounded"
                                 />
                                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
                                     Ghi nhớ đăng nhập
@@ -141,7 +179,7 @@ export default function Login() {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-primary-dark transition duration-300 font-medium flex items-center justify-center shadow-lg"
+                            className="w-full bg-primary text-white py-4 px-6 rounded-lg hover:bg-primary-dark transition duration-300 font-bold text-lg flex items-center justify-center shadow-lg mt-6"
                         >
                             {isLoading ? (
                                 <>
@@ -152,12 +190,12 @@ export default function Login() {
                                     Đang đăng nhập...
                                 </>
                             ) : (
-                                'Đăng nhập'
+                                'ĐĂNG NHẬP'
                             )}
                         </button>
                     </form>
 
-                    <div className="text-center mt-8">
+                    <div className="text-center mt-6 py-4 border-t border-gray-100">
                         <p className="text-gray-600">
                             Chưa có tài khoản?{' '}
                             <Link href="/register" className="text-primary font-semibold hover:text-primary-dark">
@@ -166,9 +204,12 @@ export default function Login() {
                         </p>
                     </div>
 
-                    <div className="mt-8 text-center">
-                        <Link href="/" className="text-gray-500 hover:text-gray-700 text-sm font-medium">
-                            ← Quay lại trang chủ
+                    <div className="mt-6 text-center pb-4">
+                        <Link href="/" className="text-gray-500 hover:text-primary flex items-center justify-center space-x-1 font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+                            </svg>
+                            <span>Quay lại trang chủ</span>
                         </Link>
                     </div>
                 </div>

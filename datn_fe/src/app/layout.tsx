@@ -1,3 +1,5 @@
+import ClientScrollProgressBar from "@/components/ClientScrollProgressBar";
+import { AuthProvider } from "@/context/AuthContext";
 import type { Metadata } from "next";
 import { Inter, Roboto } from "next/font/google";
 import "./globals.css";
@@ -32,8 +34,10 @@ export default function RootLayout({
         className={`${interFont.variable} ${robotoFont.variable} antialiased bg-white text-secondary overflow-x-hidden min-h-screen`}
         suppressHydrationWarning={true}
       >
-        {/* <ClientScrollProgressBar /> */}
-        {children}
+        <AuthProvider>
+          <ClientScrollProgressBar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
