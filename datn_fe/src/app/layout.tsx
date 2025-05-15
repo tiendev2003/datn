@@ -1,4 +1,5 @@
 import ClientScrollProgressBar from "@/components/ClientScrollProgressBar";
+import CookieConsent from "@/components/CookieConsent";
 import { AuthProvider } from "@/context/AuthContext";
 import type { Metadata } from "next";
 import { Inter, Roboto } from "next/font/google";
@@ -37,6 +38,7 @@ export default function RootLayout({
         <AuthProvider>
           <ClientScrollProgressBar />
           {children}
+          <CookieConsent />
         </AuthProvider>
       </body>
     </html>

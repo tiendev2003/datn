@@ -3,10 +3,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-// Client component that uses searchParams
-function VerifyEmailClient() {
+export default function VerifyEmailForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [isVerifying, setIsVerifying] = useState(true);
@@ -14,7 +13,7 @@ function VerifyEmailClient() {
     const [error, setError] = useState('');
     const token = searchParams.get('token');
     const email = searchParams.get('email');
-
+    
     useEffect(() => {
         const verifyEmail = async () => {
             if (!token) {
@@ -24,7 +23,7 @@ function VerifyEmailClient() {
             }
 
             try {
-                // Giả lập gọi API để xác thực email
+                // Simulate API call to verify email
                 setTimeout(() => {
                     console.log('Verifying email with token:', token);
                     setIsVerifying(false);
@@ -44,16 +43,18 @@ function VerifyEmailClient() {
     };
 
     const resendVerification = () => {
-        // Giả lập gọi API để gửi lại email xác thực
+        // Simulate API call to resend verification
         setError('');
         setIsVerifying(true);
-
+        
         setTimeout(() => {
             console.log('Resending verification email to:', email);
             setIsVerifying(false);
             setError('Email xác thực mới đã được gửi. Vui lòng kiểm tra hộp thư của bạn.');
         }, 1500);
-    };    return (
+    };
+
+    return (
         <div className="min-h-screen flex flex-col md:flex-row">
             {/* Mobile Header - Only visible on mobile */}
             <div className="lg:hidden flex items-center justify-between bg-primary text-white p-4 shadow-md">
@@ -92,7 +93,9 @@ function VerifyEmailClient() {
                         <p className="text-white/80 text-center mt-2">Xác thực tài khoản của bạn</p>
                     </div>
                 </div>
-            </div>            {/* Right side - Verification status */}
+            </div>
+            
+            {/* Right side - Verification status */}
             <div className="w-full lg:w-1/2 flex flex-col justify-start items-center bg-white px-4 sm:px-6 py-6 sm:py-8 overflow-y-auto">
                 {/* Website Name in Top Left Corner */}
                 <div className="self-start mb-6">
@@ -105,7 +108,9 @@ function VerifyEmailClient() {
                     <div className="text-center mb-6 sm:mb-10">
                         <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Xác Thực Email</h1>
                         <p className="text-gray-600">{isVerifying ? 'Đang xác thực email của bạn...' : isSuccess ? 'Email đã được xác thực thành công!' : 'Xác thực không thành công'}</p>
-                    </div>                    <div className="p-6 text-center">
+                    </div>
+                    
+                    <div className="p-6 text-center">
                         {isVerifying ? (
                             <div className="flex flex-col items-center justify-center">
                                 <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary mb-4"></div>
@@ -162,48 +167,18 @@ function VerifyEmailClient() {
                                 </Link>
                             </>
                         )}
-                    </div>                    <div className="mt-6 text-center pb-4 border-t border-gray-100 pt-4">
+                    </div>
+                    
+                    <div className="mt-6 text-center pb-4 border-t border-gray-100 pt-4">
                         <Link href="/" className="text-gray-500 hover:text-primary flex items-center justify-center space-x-1 font-medium">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
                             </svg>
                             <span>Quay lại trang chủ</span>
-                        </Link>                    </div>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>
-    );
-}
-
-// Loading fallback component
-function VerifyEmailFallback() {
-    return (
-        <div className="min-h-screen flex flex-col md:flex-row">
-            {/* Mobile Header - Only visible on mobile */}
-            <div className="lg:hidden flex items-center justify-between bg-primary text-white p-4 shadow-md">
-                <div className="flex items-center space-x-2">
-                    <Image 
-                        src="/images/logo.png" 
-                        alt="Gym Logo" 
-                        width={40} 
-                        height={40}
-                    />
-                    <h2 className="font-bold text-xl">GYMMASTER</h2>
-                </div>
-                <h2 className="font-bold text-xl">XÁC THỰC EMAIL</h2>
-            </div>
-            <div className="w-full flex-1 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
-            </div>
-        </div>
-    );
-}
-
-// Main page component with Suspense boundary
-export default function VerifyEmail() {
-    return (
-        <Suspense fallback={<VerifyEmailFallback />}>
-            <VerifyEmailClient />
-        </Suspense>
     );
 }

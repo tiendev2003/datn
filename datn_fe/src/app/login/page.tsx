@@ -204,7 +204,16 @@ export default function Login() {
                         </p>
                     </div>
 
-                    <div className="mt-6 text-center pb-4">
+                    <div className="mt-6 text-center pb-2">
+                        <div className="flex justify-center space-x-4 text-sm mb-4">
+                            <Link href="/terms" className="text-gray-500 hover:text-primary">
+                                Điều khoản sử dụng
+                            </Link>
+                            <span className="text-gray-300">|</span>
+                            <Link href="/privacy" className="text-gray-500 hover:text-primary">
+                                Chính sách bảo mật
+                            </Link>
+                        </div>
                         <Link href="/" className="text-gray-500 hover:text-primary flex items-center justify-center space-x-1 font-medium">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />

@@ -80,12 +80,12 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-gray-400 hover:text-primary transition-colors duration-300">
+                <Link href="/privacy" className="text-gray-300 hover:text-primary transition-colors duration-300 font-medium">
                   Chính sách riêng tư
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-gray-400 hover:text-primary transition-colors duration-300">
+                <Link href="/terms" className="text-gray-300 hover:text-primary transition-colors duration-300 font-medium">
                   Điều khoản dịch vụ
                 </Link>
               </li>
