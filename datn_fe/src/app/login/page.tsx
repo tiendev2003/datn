@@ -88,6 +88,44 @@ export default function Login() {
         }
     };
 
+    const handleDemoLogin = async (role: 'user' | 'trainer' | 'admin') => {
+        setIsLoading(true);
+        setError('');
+        
+        // Demo account credentials
+        let email, password;
+        switch(role) {
+            case 'admin':
+                email = 'admin@example.com';
+                password = 'adminpass';
+                break;
+            case 'trainer':
+                email = 'trainer@example.com';
+                password = 'trainerpass';
+                break;
+            default:
+                email = 'user@example.com';
+                password = 'userpass';
+        }
+        
+        // Set form data to show the credentials in the form
+        setFormData({ email, password });
+        
+        try {
+            await login(email, password);
+            console.log(`Demo login as ${role} successful, redirecting...`);
+            
+            // Small delay to ensure auth state is updated
+            setTimeout(() => {
+                redirectToDashboard();
+            }, 100);
+        } catch (err: any) {
+            console.error('Demo login error:', err);
+            setError(`Demo đăng nhập thất bại: ${err.message || 'Vui lòng kiểm tra lại thông tin.'}`);
+            setIsLoading(false);
+        }
+    };
+
     return (
         <div className="min-h-screen flex flex-col md:flex-row">
             {/* Mobile Header - Only visible on mobile */}
@@ -108,8 +146,8 @@ export default function Login() {
             <div className="hidden lg:flex lg:w-1/2 bg-primary relative">
                 <div className="absolute inset-0 bg-black opacity-20"></div>
                 <Image 
-                    src="/images/gym-background.jpg" 
-                    alt="Gym Background" 
+                    src="/images/login-background.svg" 
+                    alt="Login Background" 
                     fill 
                     style={{ objectFit: 'cover' }}
                     priority
@@ -117,8 +155,8 @@ export default function Login() {
                 <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
                     <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl shadow-2xl">
                         <Image 
-                            src="/images/logo.png" 
-                            alt="Gym Logo" 
+                            src="/images/login-logo.svg" 
+                            alt="Login Logo" 
                             width={180} 
                             height={180}
                             className="mx-auto"
@@ -225,6 +263,40 @@ export default function Login() {
                             )}
                         </button>
                     </form>
+
+                    {/* Demo Accounts Section */}
+                    <div className="mt-8 border-t border-gray-100 pt-6">
+                        <h3 className="text-center text-gray-700 font-medium mb-4">Đăng nhập nhanh với tài khoản demo</h3>
+                        <div className="grid grid-cols-3 gap-3">
+                            <button
+                                type="button"
+                                onClick={() => handleDemoLogin('user')}
+                                disabled={isLoading}
+                                className="bg-blue-500 text-white py-2 px-3 rounded-lg hover:bg-blue-600 transition duration-300 text-sm font-medium shadow-md"
+                            >
+                                Demo User
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => handleDemoLogin('trainer')}
+                                disabled={isLoading}
+                                className="bg-green-500 text-white py-2 px-3 rounded-lg hover:bg-green-600 transition duration-300 text-sm font-medium shadow-md"
+                            >
+                                Demo Trainer
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => handleDemoLogin('admin')}
+                                disabled={isLoading}
+                                className="bg-purple-500 text-white py-2 px-3 rounded-lg hover:bg-purple-600 transition duration-300 text-sm font-medium shadow-md"
+                            >
+                                Demo Admin
+                            </button>
+                        </div>
+                        <p className="text-xs text-gray-500 text-center mt-2">
+                            Nhấn vào nút để đăng nhập nhanh với vai trò tương ứng
+                        </p>
+                    </div>
 
                     <div className="text-center mt-6 py-4 border-t border-gray-100">
                         <p className="text-gray-600">

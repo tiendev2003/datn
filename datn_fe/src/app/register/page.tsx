@@ -80,8 +80,8 @@ export default function Register() {
       <div className="hidden lg:flex lg:w-1/2 bg-primary relative">
         <div className="absolute inset-0 bg-black opacity-20"></div>
         <Image 
-          src="/images/gym-background-2.jpg" 
-          alt="Gym Background" 
+          src="/images/register-background.svg" 
+          alt="Register Background" 
           fill 
           style={{ objectFit: 'cover' }}
           priority
@@ -89,8 +89,8 @@ export default function Register() {
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
           <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl shadow-2xl">
             <Image 
-              src="/images/logo.png" 
-              alt="Gym Logo" 
+              src="/images/register-logo.svg" 
+              alt="Register Logo" 
               width={180} 
               height={180}
               className="mx-auto"

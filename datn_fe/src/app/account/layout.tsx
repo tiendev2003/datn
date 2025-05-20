@@ -1,6 +1,7 @@
 'use client';
 
 import AccountSidebar from '@/components/AccountSidebar';
+import AdminSidebar from '@/components/AdminSidebar';
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import TrainerSidebar from '@/components/TrainerSidebar';
@@ -75,10 +76,10 @@ export default function AccountLayout({
       // If you have an AdminSidebar component, you can return it here
       // return <AdminSidebar />;
       // For now, we'll use the trainer sidebar for admin too
-      return <TrainerSidebar />;
+      return <AdminSidebar />;
     } else if (user?.role === 'trainer') {
       return <TrainerSidebar />;
-    }
+    } 
     return <AccountSidebar />;
   };
 
