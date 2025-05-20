@@ -12,6 +12,13 @@ interface User {
   isVerified: boolean;
 }
 
+// Helper function to determine mock role based on email for testing
+const mapEmailToMockRole = (email: string): 'admin' | 'trainer' | 'user' => {
+  if (email.includes('admin')) return 'admin';
+  if (email.includes('trainer')) return 'trainer';
+  return 'user';
+};
+
 // Define the context state
 interface AuthContextType {
   user: User | null;
@@ -26,6 +33,7 @@ interface AuthContextType {
   updateUserProfile: (data: Partial<User>) => Promise<void>;
   changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
   isAuthenticated: boolean;
+  redirectToDashboard: () => void;
 }
 
 // Define register form data
@@ -42,37 +50,61 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  
   // Check if user is logged in on page load
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        // Check if we have a token in localStorage - safely access localStorage only on client side
+        // Check if we have a token in localStorage or cookies
         if (typeof window !== 'undefined') {
-          const token = localStorage.getItem('authToken');
+          // Kiểm tra trong localStorage
+          let token = localStorage.getItem('authToken');
           
+          // Nếu không có trong localStorage, kiểm tra trong cookies
+          if (!token) {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              if (cookie.startsWith('authToken=')) {
+                token = cookie.substring('authToken='.length);
+                break;
+              }
+            }
+          }
+          
+          console.log('Token found:', token ? 'Yes' : 'No');
+
           if (token) {
-            // Validate token with backend (in a real scenario)
-            // const response = await fetch('/api/auth/validate-token', { headers: { Authorization: `Bearer ${token}` } });
-            // const data = await response.json();
+            // Đảm bảo token được lưu ở cả hai nơi
+            localStorage.setItem('authToken', token);
+            document.cookie = `authToken=${token}; path=/; max-age=${60*60*24*7}; SameSite=Lax`;
             
-            // For now, we'll simulate a successful authentication
+            // Lấy email từ localStorage
+            const savedEmail = localStorage.getItem('userEmail') || 'user@example.com';
+            
+            // Dùng email để xác định vai trò của người dùng (cho mục đích giả lập)
+            const userRole = mapEmailToMockRole(savedEmail);
+            
             const mockUser: User = {
               id: '1',
-              fullName: 'Nguyễn Văn A',
-              email: 'nguyenvana@example.com',
+              fullName: 'Người Dùng Mẫu',
+              email: savedEmail,
               phone: '0987654321',
-              role: 'user',
+              role: userRole,
               isVerified: true,
             };
             
             setUser(mockUser);
             setIsAuthenticated(true);
+            console.log('Đã tạo phiên đăng nhập giả với vai trò:', userRole);
           }
         }
       } catch (error) {
-        console.error('Error checking auth status:', error);
+        console.error('Lỗi kiểm tra trạng thái xác thực:', error);
         if (typeof window !== 'undefined') {
           localStorage.removeItem('authToken');
+          localStorage.removeItem('userEmail');
+          document.cookie = 'authToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
         }
         setUser(null);
         setIsAuthenticated(false);
@@ -80,136 +112,102 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setIsLoading(false);
       }
     };
-    
+
     checkAuthStatus();
   }, []);
 
   const login = async (email: string, password: string): Promise<void> => {
     setIsLoading(true);
     try {
-      // Here you would make an API call to your backend to authenticate user
-      // const response = await fetch('/api/auth/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password }),
-      // });
-      // const data = await response.json();
+      // Chỉ sử dụng dữ liệu giả - không kết nối với API
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Mô phỏng độ trễ API
       
-      // For now, we'll simulate a successful login
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
+      // Xác định vai trò dựa trên email để kiểm thử
+      const userRole = mapEmailToMockRole(email);
       
       const mockUser: User = {
         id: '1',
         fullName: 'Nguyễn Văn A',
         email: email,
         phone: '0987654321',
-        role: 'user',
+        role: userRole,
         isVerified: true,
       };
-        // Save token to localStorage - safely access localStorage only on client side
+        // Lưu token và email vào localStorage và cookies
       if (typeof window !== 'undefined') {
-        localStorage.setItem('authToken', 'mock-jwt-token');
-      }
+        const token = 'mock-jwt-token';
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('userEmail', email);
+        
+        // Đặt cookie với thời hạn 7 ngày
+        document.cookie = `authToken=${token}; path=/; max-age=${60*60*24*7}; SameSite=Lax`;
+      } 
       
       setUser(mockUser);
       setIsAuthenticated(true);
-    } catch (error) {
-      console.error('Login failed:', error);
+      console.log('Đăng nhập thành công với vai trò:', userRole);    } catch (error) {
+      console.error('Đăng nhập thất bại:', error);
       throw new Error('Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin.');
     } finally {
       setIsLoading(false);
     }
   };
-  
   const register = async (formData: RegisterFormData): Promise<void> => {
     setIsLoading(true);
     try {
-      // Here you would make an API call to your backend to register user
-      // const response = await fetch('/api/auth/register', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData),
-      // });
-      // const data = await response.json();
+      // Chỉ mô phỏng API
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Mô phỏng độ trễ API
       
-      // For now, we'll simulate a successful registration
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
-      
-      // Note: In a real scenario, you would not automatically set the user here
-      // as registration typically requires email verification first
+      // Trong tình huống thực tế, đăng ký thường yêu cầu xác minh email trước
     } catch (error) {
-      console.error('Registration failed:', error);
+      console.error('Đăng ký thất bại:', error);
       throw new Error('Đăng ký không thành công. Vui lòng thử lại sau.');
     } finally {
       setIsLoading(false);
     }
-  };
-    const logout = (): void => {
-    // Clear authentication data
+  };  const logout = (): void => {
+    // Xóa dữ liệu xác thực từ cả localStorage và cookies
     if (typeof window !== 'undefined') {
       localStorage.removeItem('authToken');
+      localStorage.removeItem('userEmail');
+      
+      // Xóa cookie bằng cách đặt thời hạn là quá khứ
+      document.cookie = 'authToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
     }
     setUser(null);
     setIsAuthenticated(false);
   };
-  
   const forgotPassword = async (email: string): Promise<void> => {
     setIsLoading(true);
     try {
-      // Here you would make an API call to your backend to send password reset email
-      // const response = await fetch('/api/auth/forgot-password', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email }),
-      // });
-      // const data = await response.json();
-      
-      // For now, we'll simulate a successful request
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
+      // Mô phỏng API
+      await new Promise(resolve => setTimeout(resolve, 1000));
     } catch (error) {
-      console.error('Forgot password request failed:', error);
+      console.error('Yêu cầu quên mật khẩu thất bại:', error);
       throw new Error('Không thể gửi yêu cầu lấy lại mật khẩu. Vui lòng thử lại sau.');
     } finally {
       setIsLoading(false);
     }
   };
-  
   const resetPassword = async (token: string, password: string): Promise<void> => {
     setIsLoading(true);
     try {
-      // Here you would make an API call to your backend to reset password
-      // const response = await fetch('/api/auth/reset-password', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ token, password }),
-      // });
-      // const data = await response.json();
-      
-      // For now, we'll simulate a successful request
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
+      // Mô phỏng API
+      await new Promise(resolve => setTimeout(resolve, 1000));
     } catch (error) {
-      console.error('Reset password failed:', error);
+      console.error('Đặt lại mật khẩu thất bại:', error);
       throw new Error('Không thể đặt lại mật khẩu. Vui lòng thử lại sau.');
     } finally {
       setIsLoading(false);
     }
   };
-  
   const verifyEmail = async (token: string): Promise<void> => {
     setIsLoading(true);
     try {
-      // Here you would make an API call to your backend to verify email
-      // const response = await fetch('/api/auth/verify-email', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ token }),
-      // });
-      // const data = await response.json();
-      
-      // For now, we'll simulate a successful request
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
-      
-      // If user is already logged in, update their verification status
+      // Mô phỏng API
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Nếu người dùng đã đăng nhập, cập nhật trạng thái xác minh
       if (user) {
         setUser({
           ...user,
@@ -217,96 +215,92 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
       }
     } catch (error) {
-      console.error('Email verification failed:', error);
+      console.error('Xác minh email thất bại:', error);
       throw new Error('Không thể xác thực email. Vui lòng thử lại sau.');
     } finally {
       setIsLoading(false);
     }
   };
-  
   const resendVerificationEmail = async (email: string): Promise<void> => {
     setIsLoading(true);
     try {
-      // Here you would make an API call to your backend to resend verification email
-      // const response = await fetch('/api/auth/resend-verification', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email }),
-      // });
-      // const data = await response.json();
-      
-      // For now, we'll simulate a successful request
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
+      // Mô phỏng API
+      await new Promise(resolve => setTimeout(resolve, 1000));
     } catch (error) {
-      console.error('Resend verification email failed:', error);
+      console.error('Gửi lại email xác thực thất bại:', error);
       throw new Error('Không thể gửi lại email xác thực. Vui lòng thử lại sau.');
     } finally {
       setIsLoading(false);
     }
   };
-  
   const updateUserProfile = async (data: Partial<User>): Promise<void> => {
     if (!user) {
       throw new Error('Bạn cần đăng nhập để thực hiện thao tác này.');
     }
-    
+
     setIsLoading(true);
-    try {      // Here you would make an API call to your backend to update user profile
-      // const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-      // const response = await fetch('/api/user/profile', {
-      //   method: 'PUT',
-      //   headers: { 
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${token}`
-      //   },
-      //   body: JSON.stringify(data),
-      // });
-      // const updatedData = await response.json();
-      
-      // For now, we'll simulate a successful request
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
-      
-      // Update the user state with the new data
+    try {
+      // Mô phỏng API
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Cập nhật trạng thái người dùng với dữ liệu mới
       setUser({
         ...user,
         ...data
       });
     } catch (error) {
-      console.error('Update profile failed:', error);
+      console.error('Cập nhật thông tin thất bại:', error);
       throw new Error('Không thể cập nhật thông tin. Vui lòng thử lại sau.');
     } finally {
       setIsLoading(false);
     }
   };
-  
   const changePassword = async (currentPassword: string, newPassword: string): Promise<void> => {
     if (!user) {
       throw new Error('Bạn cần đăng nhập để thực hiện thao tác này.');
     }
-    
+
     setIsLoading(true);
-    try {      // Here you would make an API call to your backend to change password
-      // const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-      // const response = await fetch('/api/user/change-password', {
-      //   method: 'POST',
-      //   headers: { 
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${token}`
-      //   },
-      //   body: JSON.stringify({ currentPassword, newPassword }),
-      // });
-      // const data = await response.json();
-      
-      // For now, we'll simulate a successful request
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API delay
+    try {
+      // Mô phỏng API
+      await new Promise(resolve => setTimeout(resolve, 1000));
     } catch (error) {
-      console.error('Change password failed:', error);
+      console.error('Đổi mật khẩu thất bại:', error);
       throw new Error('Không thể đổi mật khẩu. Vui lòng thử lại sau.');
     } finally {
       setIsLoading(false);
+    }  };
+  
+  const redirectToDashboard = (): void => {
+    if (!user) return;
+    
+    try {
+      if (typeof window !== 'undefined') {
+        // Đảm bảo token được lưu trong cả localStorage và cookie trước khi chuyển hướng
+        const token = localStorage.getItem('authToken');
+        if (token) {
+          document.cookie = `authToken=${token}; path=/; max-age=${60*60*24*7}; SameSite=Lax`;
+        }
+      
+        // Xác định đường dẫn dựa trên vai trò
+        const path = user.role === 'admin' 
+          ? '/account/admin/dashboard'
+          : user.role === 'trainer'
+            ? '/account/trainer/dashboard'
+            : '/account/dashboard';
+        
+        console.log(`Chuyển hướng người dùng ${user.role} đến: ${path}`);
+        
+        // Điều hướng bằng cách thay đổi địa chỉ URL
+        window.location.href = path;
+      }
+    } catch (error) {
+      console.error('Lỗi khi chuyển hướng:', error);
+      // Fallback đến trang dashboard nếu có lỗi
+      window.location.href = '/account/dashboard';
     }
   };
-  
+
   const value = {
     user,
     isLoading,
@@ -319,19 +313,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     resendVerificationEmail,
     updateUserProfile,
     changePassword,
-    isAuthenticated
+    isAuthenticated,
+    redirectToDashboard
   };
-  
+
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 // Custom hook to use the auth context
 export function useAuth() {
   const context = useContext(AuthContext);
-  
+
   if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-  
+
   return context;
 }

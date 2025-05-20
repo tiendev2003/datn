@@ -159,7 +159,7 @@ const TrainerDetailPage = () => {
               <h2 className="text-2xl font-bold mb-4">Mạng xã hội</h2>
               <div className="flex space-x-4">
                 {trainer.socialMedia.facebook && (
-                  <a href={trainer.socialMedia.facebook} target="_blank" rel="noopener noreferrer" className="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition-colors duration-300">
+                  <a href={trainer.socialMedia.facebook} target="_blank" rel="noopener noreferrer" className="bg-primary text-white p-3 rounded-full hover:bg-primary-dark transition-colors duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
                     </svg>

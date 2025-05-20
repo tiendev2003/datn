@@ -11,9 +11,16 @@
 
 ### 1.2. Khách Hàng (Hội Viên)
 - **Đăng ký và thanh toán gói tập**: Chọn gói, thanh toán online (MoMo, ZaloPay, v.v.), nhận email hóa đơn.
+  - Có thể chọn gói theo ngày cụ thể (1, 7, 15, 30 ngày) hoặc theo tháng (1, 3, 6, 12 tháng)
+  - Tính năng ưu đãi cho gói dài hạn
+  - Thông báo khi gói sắp hết hạn
 - **Quản lý thông tin cá nhân**: Cập nhật thông tin, xem lịch sử giao dịch, gia hạn gói tập.
 - **Đặt lịch tập với PT**: Xem lịch trống, đặt lịch cá nhân hoặc nhóm, nhận email xác nhận.
-- **Đánh giá PT**: Gửi đánh giá hoặc phản hồi.
+- **Đánh giá PT**: 
+  - Đánh giá sau mỗi buổi tập hoặc sau khi hoàn thành một gói PT
+  - Cho điểm sao (1-5 sao) và viết nhận xét chi tiết
+  - Đánh giá về chuyên môn, thái độ, hiệu quả của PT
+  - Tùy chọn đính kèm hình ảnh (trước/sau)
 - **Nhận thông báo**: Lịch nghỉ, sự kiện, khuyến mãi.
 
 
@@ -44,8 +51,12 @@
 
 ### 2.2. Gói Tập và Thanh Toán
 - Danh sách gói tập (Gym, Yoga, PT) với chi tiết giá, thời hạn.
+  - Hỗ trợ nhiều loại thời hạn: theo ngày cố định (1, 7, 15, 30 ngày) hoặc theo tháng (1, 3, 6, 12 tháng)
+  - Thiết lập giá theo thời hạn với ưu đãi cho gói dài hạn
+  - Khả năng tạo gói combo (PT + Gym) hoặc gói tùy chỉnh
 - Tích hợp cổng thanh toán (MoMo, ZaloPay, ngân hàng).
 - Gửi hóa đơn qua email, quản lý gia hạn gói tập.
+- Hệ thống nhắc nhở tự động khi sắp hết hạn (15, 7, 3, 1 ngày trước)
 
 ### 2.3. Lịch và Đặt Lịch
 - Hệ thống lịch cho PT, hiển thị lịch trống.
@@ -55,6 +66,12 @@
 - Quản lý lịch làm việc, ngày nghỉ, học viên.
 - Thống kê thu nhập, hiệu suất làm việc.
 - Gửi thông báo hàng loạt tới học viên.
+- Hệ thống đánh giá và phản hồi:
+  - Hiển thị điểm đánh giá trung bình (1-5 sao)
+  - Hiển thị các đánh giá chi tiết từ khách hàng
+  - Khả năng phản hồi các đánh giá của khách hàng
+  - Thống kê xu hướng đánh giá theo thời gian
+  - Xếp hạng PT dựa trên đánh giá và hiệu suất
 
 ### 2.5. Quản Lý Nhân Viên
 - Phân ca làm việc, chấm công, tính lương tự động.
@@ -116,6 +133,60 @@
 2. Xem doanh thu, xuất báo cáo (Excel, PDF).
 3. Phân tích dữ liệu để điều chỉnh chiến lược.
 
----
+### 4.6. Đánh Giá PT và Phản Hồi
+1. Sau khi hoàn thành buổi tập hoặc kết thúc gói PT, hệ thống gửi email mời đánh giá.
+2. Khách hàng đánh giá PT (sao + nhận xét), có thể đính kèm hình ảnh.
+3. PT nhận thông báo về đánh giá mới và có thể phản hồi.
+4. Các đánh giá được hiển thị công khai trên hồ sơ PT (có thể lọc và sắp xếp).
+5. Hệ thống tự động tính toán và cập nhật điểm trung bình cho PT.
+
+### 4.7. Quản Lý Gói Tập Theo Thời Hạn
+1. Admin thiết lập các gói tập với nhiều lựa chọn thời hạn (ngày/tháng).
+2. Hệ thống tự động tính giá theo thời hạn và áp dụng ưu đãi cho gói dài hạn.
+3. Khách hàng chọn gói và thời hạn phù hợp, thanh toán.
+4. Hệ thống tự động tính ngày hết hạn và thiết lập lịch nhắc nhở.
+5. Gửi thông báo khi sắp hết hạn và đề xuất gia hạn với ưu đãi đặc biệt.
+
+## 5. Mô Hình Dữ Liệu và Quan Hệ
+
+### 5.1. Bảng Người Dùng (users)
+- `id`, `email`, `password`, `role`, `full_name`, `phone`, `address`, `created_at`, `updated_at`
+
+### 5.2. Bảng Gói Tập (packages)
+- `id`, `name`, `description`, `type` (gym, yoga, zumba, etc.)
+- `base_price` (giá cơ bản)
+- `is_active` (trạng thái hoạt động)
+- `created_at`, `updated_at`
+
+### 5.3. Bảng Thời Hạn Gói (package_durations)
+- `id`, `package_id` (khóa ngoại tới gói tập)
+- `duration_type` (day/month - ngày/tháng)
+- `duration_value` (số ngày/tháng)
+- `price` (giá theo thời hạn cụ thể)
+- `discount_percent` (phần trăm giảm giá cho gói dài hạn)
+
+### 5.4. Bảng Đăng Ký Gói (memberships)
+- `id`, `user_id`, `package_id`, `duration_id`
+- `start_date`, `end_date`
+- `payment_status`, `payment_method`
+- `total_price`, `transaction_id`
+- `created_at`, `updated_at`
+
+### 5.5. Bảng Đánh Giá PT (trainer_ratings)
+- `id`, `user_id` (người đánh giá), `trainer_id` (PT được đánh giá)
+- `session_id` (buổi tập liên quan, nếu có)
+- `rating` (1-5 sao)
+- `comment` (nhận xét chi tiết)
+- `expertise_rating` (đánh giá về chuyên môn)
+- `attitude_rating` (đánh giá về thái độ)
+- `effectiveness_rating` (đánh giá về hiệu quả)
+- `images` (URL hình ảnh đính kèm, có thể lưu dạng JSON)
+- `is_public` (hiển thị công khai hay không)
+- `created_at`, `updated_at`
+
+### 5.6. Bảng Phản Hồi Đánh Giá (rating_replies)
+- `id`, `rating_id` (khóa ngoại tới bảng đánh giá)
+- `reply_text`, `replied_by` (người phản hồi, thường là PT hoặc admin)
+- `created_at`, `updated_at`
 
 

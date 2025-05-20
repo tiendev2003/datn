@@ -5,7 +5,7 @@ import { isValidEmail } from '@/utils/auth';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Login() {
     const router = useRouter();
@@ -16,6 +16,34 @@ export default function Login() {
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    
+    const { login, user, isAuthenticated, redirectToDashboard } = useAuth();
+    
+    // Kiểm tra nếu người dùng đã đăng nhập, chuyển hướng họ đến trang dashboard
+    useEffect(() => {
+        if (isAuthenticated && user) {
+            console.log('Already authenticated, redirecting...');
+            
+            // Kiểm tra cookies và localStorage để đảm bảo token được lưu ở cả hai nơi
+            if (typeof window !== 'undefined') {
+                const token = localStorage.getItem('authToken');
+                if (token) {
+                    document.cookie = `authToken=${token}; path=/; max-age=${60*60*24*7}; SameSite=Lax`;
+                }
+            }
+            
+            // Chuyển hướng người dùng dựa vào vai trò
+            setTimeout(() => {
+                if (user.role === 'admin') {
+                    router.push('/account/admin/dashboard');
+                } else if (user.role === 'trainer') {
+                    router.push('/account/trainer/dashboard');
+                } else {
+                    router.push('/account/dashboard');
+                }
+            }, 100);
+        }
+    }, [isAuthenticated, user, router]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -24,8 +52,6 @@ export default function Login() {
             [name]: value,
         });
     };
-
-    const { login } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
@@ -49,9 +75,14 @@ export default function Login() {
                 localStorage.removeItem('rememberedEmail');
             }
             
-            // Redirect to home page after successful login
-            router.push('/');
+            console.log('Login successful, redirecting...');
+            // Use the redirectToDashboard function from the auth context
+            // Add a small delay to ensure authentication state is updated
+            setTimeout(() => {
+                redirectToDashboard(); 
+            }, 100);
         } catch (err: any) {
+            console.error('Login error:', err);
             setError(err.message || 'Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin.');
             setIsLoading(false);
         }

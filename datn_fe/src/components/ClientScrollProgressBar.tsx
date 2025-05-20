@@ -1,8 +1,16 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import ScrollProgressBar from './ScrollProgressBar';
 
 const ClientScrollProgressBar = () => {
+  const pathname = usePathname();
+  
+  // Chỉ hiển thị thanh tiến trình ở trang chủ, không hiển thị ở các trang khác
+  if (pathname !== '/') {
+    return null;
+  }
+  
   return (
     <ScrollProgressBar 
       position="top" 

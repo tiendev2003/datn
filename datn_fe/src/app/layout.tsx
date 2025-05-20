@@ -1,6 +1,6 @@
-import ClientScrollProgressBar from "@/components/ClientScrollProgressBar";
 import CookieConsent from "@/components/CookieConsent";
 import { AuthProvider } from "@/context/AuthContext";
+import { MessageProvider } from "@/context/MessageContext";
 import type { Metadata } from "next";
 import { Inter, Roboto } from "next/font/google";
 import "./globals.css";
@@ -36,9 +36,10 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <AuthProvider>
-          <ClientScrollProgressBar />
-          {children}
-          <CookieConsent />
+          <MessageProvider>
+            {children}
+            <CookieConsent />
+          </MessageProvider>
         </AuthProvider>
       </body>
     </html>

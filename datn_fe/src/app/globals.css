@@ -1,5 +1,17 @@
 @import "tailwindcss";
- @layer components {
+
+:root {
+  --color-primary: #FF0000;
+  --color-primary-rgb: 255, 0, 0;
+  --color-primary-dark: #CC0000;
+  --color-secondary: #1F2937;
+  --color-blue: #3B82F6;
+  --color-blue-rgb: 59, 130, 246;
+  --color-green: #10B981;
+  --color-green-rgb: 16, 185, 129;
+}
+
+@layer components {
   .container {
     width: 100%;
     margin-inline: auto;
@@ -71,4 +83,262 @@
 body {
   background: var(--background);
   color: var(--foreground);
- }
+}
+
+/* Dashboard styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-white {
+  background-color: white;
+  color: var(--primary);
+  border: 1px solid white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.btn-white:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.btn-glass {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.btn-glass:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(229, 62, 62, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-outline {
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+}
+
+.btn-outline:hover {
+  background-color: #f8fafc;
+}
+
+.btn-link {
+  color: var(--primary);
+  font-weight: 500;
+  padding: 0.5rem;
+}
+
+.btn-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.card {
+  background-color: white;
+  border-radius: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 1.25rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  height: 100%;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  height: 100%;
+}
+
+.tab-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 2px solid transparent;
+  color: #64748b;
+  font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.tab-button:hover {
+  color: #1f2937;
+}
+
+.tab-active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.workout-card {
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  transition: all 0.2s;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.workout-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transform: translateY(-1px);
+}
+
+.progress-card {
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.notification-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #f3f4f6;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.notification-card:hover {
+  background-color: #f9fafb;
+}
+
+.notification-card.unread {
+  background-color: #eff6ff;
+  border-color: #dbeafe;
+}
+
+.notification-card.warning {
+  border-left: 3px solid #f59e0b;
+}
+
+.notification-card.info {
+  border-left: 3px solid #3b82f6;
+}
+
+.notification-card.success {
+  border-left: 3px solid #10b981;
+}
+
+.notification-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.375rem;
+}
+
+.notification-card.info .notification-icon {
+  background-color: #dbeafe;
+  color: #3b82f6;
+}
+
+.notification-card.warning .notification-icon {
+  background-color: #fef3c7;
+  color: #f59e0b;
+}
+
+.notification-card.success .notification-icon {
+  background-color: #d1fae5;
+  color: #10b981;
+}
+
+.action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.375rem;
+  background-color: #f9fafb;
+  color: #6b7280;
+  transition: all 0.2s;
+}
+
+.action-button:hover {
+  background-color: #f3f4f6;
+}
+
+.action-button.edit:hover {
+  color: #3b82f6;
+}
+
+.action-button.delete:hover {
+  color: #ef4444;
+  background-color: #fee2e2;
+}
+
+.action-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem;
+  text-align: center;
+  border-radius: 0.75rem;
+  transition: all 0.2s;
+}
+
+.action-tile-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.action-tile-content h3 {
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.action-tile-content p {
+  font-size: 0.75rem;
+}
+
+/* Utility classes */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

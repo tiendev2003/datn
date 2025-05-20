@@ -1,6 +1,7 @@
 'use client';
 import About from "@/components/About";
 import BackToTop from "@/components/BackToTop";
+import ClientScrollProgressBar from "@/components/ClientScrollProgressBar";
 import Contact from "@/components/Contact";
 import Facilities from "@/components/Facilities";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
@@ -15,6 +16,7 @@ import Trainers from "@/components/Trainers";
 export default function Home() {
   return (
     <div className="min-h-screen">
+      <ClientScrollProgressBar />
       <Header />
       <FloatingWhatsApp />
       <BackToTop />
