@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.2.3",
+    "chart.js": "^4.4.9",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.11.3",
     "next": "15.3.2",
