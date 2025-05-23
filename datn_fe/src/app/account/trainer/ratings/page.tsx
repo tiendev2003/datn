@@ -33,6 +33,8 @@ export default function TrainerRatings() {
   const [isLoading, setIsLoading] = useState(true);
   const [ratingFilter, setRatingFilter] = useState<'all' | 'unanswered' | 'answered'>('all');
   const [starFilter, setStarFilter] = useState<number | 'all'>('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const ratingsPerPage = 5; // Số đánh giá trên mỗi trang
   
   const [ratings, setRatings] = useState<Rating[]>([
     {
@@ -106,6 +108,11 @@ export default function TrainerRatings() {
   const [replyingToId, setReplyingToId] = useState<string | null>(null);
   
   useEffect(() => {
+    // Reset về trang 1 khi thay đổi bộ lọc
+    setCurrentPage(1);
+  }, [ratingFilter, starFilter]);
+
+  useEffect(() => {
     // Redirect if not authenticated or not a trainer
     if (!isLoading && (!isAuthenticated || user?.role !== 'trainer')) {
       router.push('/login');
@@ -123,6 +130,12 @@ export default function TrainerRatings() {
     
     return true;
   });
+
+  // Tính toán phân trang
+  const totalPages = Math.ceil(filteredRatings.length / ratingsPerPage);
+  const indexOfLastRating = currentPage * ratingsPerPage;
+  const indexOfFirstRating = indexOfLastRating - ratingsPerPage;
+  const currentRatings = filteredRatings.slice(indexOfFirstRating, indexOfLastRating);
   
   const handleReplyClick = (id: string) => {
     setReplyingToId(id);
@@ -213,45 +226,91 @@ export default function TrainerRatings() {
       
       {/* Ratings List */}
       <div className="space-y-4">
-        {filteredRatings.length > 0 ? (
-          filteredRatings.map((rating, index) => (
-            <motion.div
-              key={rating.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-            >
-              <TrainerRating
-                id={rating.id}
-                userName={rating.userName}
-                userAvatar={rating.userAvatar}
-                rating={rating.rating}
-                expertise={rating.expertise}
-                attitude={rating.attitude}
-                effectiveness={rating.effectiveness}
-                comment={rating.comment}
-                images={rating.images}
-                createdAt={rating.createdAt}
-                trainerReply={rating.trainerReply}
-                likeCount={rating.likeCount}
-                dislikeCount={rating.dislikeCount}
-              />
-              
-              {!rating.trainerReply && (
-                <div className="flex justify-end mt-2">
+        {currentRatings.length > 0 ? (
+          <>
+            {currentRatings.map((rating, index) => (
+              <motion.div
+                key={rating.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+              >
+                <TrainerRating
+                  id={rating.id}
+                  userName={rating.userName}
+                  userAvatar={rating.userAvatar}
+                  rating={rating.rating}
+                  expertise={rating.expertise}
+                  attitude={rating.attitude}
+                  effectiveness={rating.effectiveness}
+                  comment={rating.comment}
+                  images={rating.images}
+                  createdAt={rating.createdAt}
+                  trainerReply={rating.trainerReply}
+                  likeCount={rating.likeCount}
+                  dislikeCount={rating.dislikeCount}
+                />
+                
+                {!rating.trainerReply && (
+                  <div className="flex justify-end mt-2">
+                    <button
+                      onClick={() => handleReplyClick(rating.id)}
+                      className="text-primary hover:underline text-sm"
+                    >
+                      Trả lời đánh giá này
+                    </button>
+                  </div>
+                )}
+              </motion.div>
+            ))}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-6 flex items-center justify-between bg-white rounded-lg p-4 shadow-sm">
+                <div className="text-sm text-gray-700">
+                  Hiển thị {indexOfFirstRating + 1} đến {Math.min(indexOfLastRating, filteredRatings.length)} của {filteredRatings.length} đánh giá
+                </div>
+                <div className="flex gap-2">
                   <button
-                    onClick={() => handleReplyClick(rating.id)}
-                    className="text-primary hover:underline text-sm"
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="flex items-center justify-center w-8 h-8 rounded-full border text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-white transition-colors"
                   >
-                    Trả lời đánh giá này
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+
+                  {[...Array(totalPages)].map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(i + 1)}
+                      className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                        currentPage === i + 1
+                          ? "bg-primary text-white"
+                          : "border text-gray-700 hover:bg-gray-100"
+                      } transition-colors`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="flex items-center justify-center w-8 h-8 rounded-full border text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-white transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                    </svg>
                   </button>
                 </div>
-              )}
-            </motion.div>
-          ))
+              </div>
+            )}
+          </>
         ) : (
-          <div className="bg-white rounded-lg p-8 shadow-sm text-center">
-            <p className="text-gray-500">Không tìm thấy đánh giá nào phù hợp với bộ lọc của bạn.</p>
+          <div className="bg-white rounded-lg p-8 text-center shadow-sm">
+            <p className="text-gray-500">Không có đánh giá nào phù hợp với bộ lọc.</p>
           </div>
         )}
       </div>

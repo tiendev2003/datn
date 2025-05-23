@@ -1,5 +1,8 @@
 import PageTitle from '@/components/PageTitle';
-import { RiArticleLine, RiDeleteBinLine, RiEyeLine, RiFilterLine, RiPencilLine, RiVideoLine } from 'react-icons/ri';
+import {
+    RiAddLine, RiArrowLeftSLine, RiArrowRightSLine,
+    RiArticleLine, RiDeleteBinLine, RiEyeLine, RiFilterLine, RiPencilLine, RiVideoLine
+} from 'react-icons/ri';
 
 export default function ContentManagement() {
   // Enhanced placeholder data for content items
@@ -66,33 +69,34 @@ export default function ContentManagement() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <PageTitle title="Quản lý nội dung" description="Quản lý tất cả bài viết, video và nội dung trên hệ thống" />
-        <button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition flex items-center">
-          <span className="mr-1">+</span> Thêm nội dung
+        <button className="bg-gradient-to-r from-primary to-primary-dark text-white px-4 py-2 rounded-lg hover:shadow-md transition flex items-center gap-2 transform hover:-translate-y-0.5">
+          <RiAddLine size={18} />
+          <span>Thêm nội dung</span>
         </button>
       </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-lg shadow-md">
+        <div className="bg-gradient-to-br from-white to-blue-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 cursor-pointer">
           <p className="text-gray-600 text-sm">Tổng nội dung</p>
           <p className="text-2xl font-bold">{totalContents}</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
+        <div className="bg-gradient-to-br from-white to-green-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 cursor-pointer">
           <p className="text-gray-600 text-sm">Đã xuất bản</p>
           <p className="text-2xl font-bold text-green-600">{publishedContents}</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
+        <div className="bg-gradient-to-br from-white to-yellow-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 cursor-pointer">
           <p className="text-gray-600 text-sm">Bản nháp</p>
           <p className="text-2xl font-bold text-yellow-600">{draftContents}</p>
         </div>
-        <div className="bg-white p-4 rounded-lg shadow-md">
+        <div className="bg-gradient-to-br from-white to-blue-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 cursor-pointer">
           <p className="text-gray-600 text-sm">Tổng lượt xem</p>
           <p className="text-2xl font-bold text-blue-600">{totalViews.toLocaleString()}</p>
         </div>
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white p-4 rounded-lg shadow-md flex flex-wrap gap-4 items-center">
+      <div className="bg-gradient-to-r from-gray-50 to-white p-4 rounded-lg shadow-sm hover:shadow-md transition flex flex-wrap gap-4 items-center">
         <div>
           <label htmlFor="type-filter" className="block text-sm font-medium text-gray-700 mb-1">
             Loại nội dung
@@ -160,7 +164,7 @@ export default function ContentManagement() {
             type="text"
             id="search"
             placeholder="Tìm theo tiêu đề nội dung..."
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
       </div>
@@ -169,7 +173,7 @@ export default function ContentManagement() {
       <div className="bg-white shadow-md rounded-lg overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="bg-gray-50 text-left">
+            <tr className="bg-gradient-to-r from-gray-50 to-gray-100 text-left">
               <th className="px-6 py-3 text-sm font-semibold text-gray-700">Tiêu đề</th>
               <th className="px-6 py-3 text-sm font-semibold text-gray-700">Loại</th>
               <th className="px-6 py-3 text-sm font-semibold text-gray-700">Danh mục</th>
@@ -210,15 +214,30 @@ export default function ContentManagement() {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex space-x-2">
-                    <button className="text-blue-600 hover:text-blue-800 flex items-center" title="Xem">
-                      <RiEyeLine size={18} />
-                    </button>
-                    <button className="text-blue-600 hover:text-blue-800 flex items-center" title="Sửa">
-                      <RiPencilLine size={18} />
-                    </button>
-                    <button className="text-red-600 hover:text-red-800 flex items-center" title="Xóa">
-                      <RiDeleteBinLine size={18} />
-                    </button>
+                    <div className="relative group">
+                      <button className="text-blue-600 hover:text-blue-800 p-1.5 rounded-full hover:bg-blue-100 transition-colors">
+                        <RiEyeLine size={18} />
+                      </button>
+                      <span className="absolute hidden group-hover:block -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-10">
+                        Xem
+                      </span>
+                    </div>
+                    <div className="relative group">
+                      <button className="text-blue-600 hover:text-blue-800 p-1.5 rounded-full hover:bg-blue-100 transition-colors">
+                        <RiPencilLine size={18} />
+                      </button>
+                      <span className="absolute hidden group-hover:block -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-10">
+                        Sửa
+                      </span>
+                    </div>
+                    <div className="relative group">
+                      <button className="text-red-600 hover:text-red-800 p-1.5 rounded-full hover:bg-red-100 transition-colors">
+                        <RiDeleteBinLine size={18} />
+                      </button>
+                      <span className="absolute hidden group-hover:block -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-10">
+                        Xóa
+                      </span>
+                    </div>
                   </div>
                 </td>
               </tr>
@@ -228,19 +247,19 @@ export default function ContentManagement() {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
+      <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
         <div className="text-sm text-gray-700">
           Hiển thị <span className="font-medium">1</span> đến <span className="font-medium">5</span> của <span className="font-medium">5</span> nội dung
         </div>
         <div className="flex space-x-2">
-          <button className="px-3 py-1 border rounded hover:bg-gray-50" disabled>
-            Trước
+          <button className="flex items-center justify-center w-8 h-8 rounded-full border text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-white" disabled>
+            <RiArrowLeftSLine size={16} />
           </button>
-          <button className="px-3 py-1 bg-primary text-white rounded">
+          <button className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white">
             1
           </button>
-          <button className="px-3 py-1 border rounded hover:bg-gray-50" disabled>
-            Tiếp
+          <button className="flex items-center justify-center w-8 h-8 rounded-full border text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-white" disabled>
+            <RiArrowRightSLine size={16} />
           </button>
         </div>
       </div>

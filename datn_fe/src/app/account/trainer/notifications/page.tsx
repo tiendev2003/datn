@@ -6,12 +6,14 @@ import { useNotifications } from '@/context/NotificationContext';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import {
-  RiBookmarkLine,
-  RiCalendarLine,
-  RiCheckLine,
-  RiDeleteBinLine,
-  RiErrorWarningLine, RiNotification2Line,
-  RiTimeLine
+    RiBookmarkLine,
+    RiCalendarLine,
+    RiCheckLine,
+    RiDeleteBinLine,
+    RiErrorWarningLine,
+    RiNotification2Line,
+    RiTimeLine,
+    RiUserLine
 } from 'react-icons/ri';
 
 // Animation variants
@@ -36,13 +38,16 @@ const item = {
   }
 };
 
-export default function NotificationsPage() {
+export default function TrainerNotificationsPage() {
   const { notifications, markAsRead, markAllAsRead, deleteNotification, unreadCount } = useNotifications();
   const { user } = useAuth();
-  const [filter, setFilter] = useState<'all' | 'unread' | 'booking' | 'package' | 'system' | 'pt_session' | 'class'>('all');
+  const [filter, setFilter] = useState<'all' | 'unread' | 'booking' | 'payment' | 'system' | 'pt_session' | 'client' | 'availability'>('all');
   
-  // Filter notifications based on role and selected filter
+  // Filter notifications based on trainer role and selected filter
   const filteredNotifications = notifications.filter(n => {
+    // Only show notifications relevant for trainers
+    if (user?.role !== 'trainer') return false;
+    
     if (filter === 'all') return true;
     if (filter === 'unread') return !n.isRead;
     return n.category === filter;
@@ -75,10 +80,12 @@ export default function NotificationsPage() {
     switch (type) {
       case 'booking':
         return <RiCalendarLine className="h-5 w-5" />;
-      case 'package':
+      case 'payment':
         return <RiBookmarkLine className="h-5 w-5" />;
       case 'system':
         return <RiErrorWarningLine className="h-5 w-5" />;
+      case 'client':
+        return <RiUserLine className="h-5 w-5" />;
       default:
         return <RiNotification2Line className="h-5 w-5" />;
     }
@@ -107,41 +114,31 @@ export default function NotificationsPage() {
               Chưa đọc {unreadCount > 0 && `(${unreadCount})`}
             </button>
             
-            {/* Common filters for all users */}
+            {/* Trainer-specific filters */}
             <button
-              onClick={() => setFilter('booking')}
-              className={`tab-button ${filter === 'booking' ? 'tab-active' : ''}`}
+              onClick={() => setFilter('pt_session')}
+              className={`tab-button ${filter === 'pt_session' ? 'tab-active' : ''}`}
             >
-              Lịch hẹn
+              Buổi tập PT
             </button>
-            
-            {user?.role === 'user' && (
-              <button
-                onClick={() => setFilter('package')}
-                className={`tab-button ${filter === 'package' ? 'tab-active' : ''}`}
-              >
-                Gói tập
-              </button>
-            )}
-
-            {/* PT-specific filters */}
-            {user?.role === 'trainer' && (
-              <>
-                <button
-                  onClick={() => setFilter('pt_session')}
-                  className={`tab-button ${filter === 'pt_session' ? 'tab-active' : ''}`}
-                >
-                  Buổi tập PT
-                </button>
-                <button
-                  onClick={() => setFilter('class')}
-                  className={`tab-button ${filter === 'class' ? 'tab-active' : ''}`}
-                >
-                  Lớp tập
-                </button>
-              </>
-            )}
-
+            <button
+              onClick={() => setFilter('client')}
+              className={`tab-button ${filter === 'client' ? 'tab-active' : ''}`}
+            >
+              Khách hàng
+            </button>
+            <button
+              onClick={() => setFilter('payment')}
+              className={`tab-button ${filter === 'payment' ? 'tab-active' : ''}`}
+            >
+              Thu nhập
+            </button>
+            <button
+              onClick={() => setFilter('availability')}
+              className={`tab-button ${filter === 'availability' ? 'tab-active' : ''}`}
+            >
+              Lịch làm việc
+            </button>
             <button
               onClick={() => setFilter('system')}
               className={`tab-button ${filter === 'system' ? 'tab-active' : ''}`}
@@ -240,13 +237,13 @@ export default function NotificationsPage() {
                   ? 'Không có thông báo nào chưa đọc'
                   : filter === 'pt_session'
                     ? 'Không có thông báo nào về buổi tập PT'
-                    : filter === 'class'
-                      ? 'Không có thông báo nào về lớp tập'
-                      : `Không có thông báo nào về ${
-                          filter === 'booking' ? 'lịch hẹn' :
-                          filter === 'package' ? 'gói tập' :
-                          'hệ thống'
-                        }`
+                    : filter === 'client'
+                      ? 'Không có thông báo nào về khách hàng'
+                      : filter === 'payment'
+                        ? 'Không có thông báo nào về thu nhập'
+                        : filter === 'availability'
+                          ? 'Không có thông báo nào về lịch làm việc'
+                          : 'Không có thông báo nào về hệ thống'
               }
             </p>
           </div>

@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ReactNode, useEffect, useState } from 'react';
 import MessageNotificationBadge from './MessageNotificationBadge';
+import NotificationBadge from './NotificationBadge';
 import TextFlip from './TextFlip';
 
 // Define prop types for components
@@ -173,16 +174,21 @@ const Header = ({ isAccountPage = false }: HeaderProps) => {
       return (
         <div className="relative user-menu-container">
           <div className="flex items-center space-x-2">
-            {/* Message notification */}
-            {
-              user.role === 'user'  || user.role === 'trainer' && (
-                <Link href="/account/messages" className="hidden md:block">
+            {/* Message and notifications */}
+            {(user.role === 'user' || user.role === 'trainer') && (
+              <div className="hidden md:flex space-x-2">
+                <Link href="/account/messages">
                   <MessageNotificationBadge
                     className={isScrolled ? 'hover:bg-gray-100' : 'hover:bg-white/20 text-white'}
                   />
-                </Link>)
-            }
-           
+                </Link>
+                <Link href="/account/notifications">
+                  <NotificationBadge 
+                    className={isScrolled ? 'hover:bg-gray-100' : 'hover:bg-white/20 text-white'}
+                  />
+                </Link>
+              </div>
+            )}
 
             {/* Membership days remaining tag */}
             <div className="hidden md:flex items-center mr-4">
@@ -528,14 +534,21 @@ const Header = ({ isAccountPage = false }: HeaderProps) => {
                   </div>
                 </div>
 
-                {/* Message notifications for mobile */}
-                <div className="flex justify-center mt-3">
+                {/* Message and notifications for mobile */}
+                <div className="flex justify-center space-x-4 mt-3">
                   <Link
                     href="/account/messages"
                     className="inline-block"
                     onClick={toggleMenu}
                   >
                     <MessageNotificationBadge className="text-white hover:bg-white/20" />
+                  </Link>
+                  <Link
+                    href="/account/notifications"
+                    className="inline-block"
+                    onClick={toggleMenu}
+                  >
+                    <NotificationBadge className="text-white hover:bg-white/20" />
                   </Link>
                 </div>
 

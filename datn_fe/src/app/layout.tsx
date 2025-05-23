@@ -1,6 +1,7 @@
 import CookieConsent from "@/components/CookieConsent";
 import { AuthProvider } from "@/context/AuthContext";
 import { MessageProvider } from "@/context/MessageContext";
+import { NotificationProvider } from "@/context/NotificationContext";
 import type { Metadata } from "next";
 import { Inter, Roboto } from "next/font/google";
 import "./globals.css";
@@ -27,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className="scroll-smooth">
+    <html lang="vi" className="scroll-smooth" suppressHydrationWarning={true}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </head>
@@ -36,10 +37,12 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
         <AuthProvider>
-          <MessageProvider>
-            {children}
-            <CookieConsent />
-          </MessageProvider>
+          <NotificationProvider>
+            <MessageProvider>
+              {children}
+              <CookieConsent />
+            </MessageProvider>
+          </NotificationProvider>
         </AuthProvider>
       </body>
     </html>

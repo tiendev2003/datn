@@ -29,6 +29,8 @@ export default function ManageClients() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive' | 'pending'>('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const clientsPerPage = 5; // Số học viên trên mỗi trang
   
   const [clients, setClients] = useState<Client[]>([
     {
@@ -98,6 +100,11 @@ export default function ManageClients() {
   ]);
 
   useEffect(() => {
+    // Reset về trang 1 khi thay đổi bộ lọc hoặc tìm kiếm
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter]);
+
+  useEffect(() => {
     // Redirect if not authenticated or not a trainer
     if (!isLoading && (!isAuthenticated || user?.role !== 'trainer')) {
       router.push('/login');
@@ -114,6 +121,12 @@ export default function ManageClients() {
     
     return matchesSearch && matchesStatus;
   });
+  
+  // Tính toán phân trang
+  const totalPages = Math.ceil(filteredClients.length / clientsPerPage);
+  const indexOfLastClient = currentPage * clientsPerPage;
+  const indexOfFirstClient = indexOfLastClient - clientsPerPage;
+  const currentClients = filteredClients.slice(indexOfFirstClient, indexOfLastClient);
   
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -184,90 +197,136 @@ export default function ManageClients() {
           <h2 className="text-lg font-bold">Danh sách học viên ({filteredClients.length})</h2>
         </div>
         
-        {filteredClients.length > 0 ? (
-          <div className="divide-y divide-gray-100">
-            {filteredClients.map((client, index) => (
-              <motion.div
-                key={client.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="p-4 hover:bg-gray-50"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-center">
-                    <div className="relative h-12 w-12 rounded-full overflow-hidden mr-4">
-                      <Image
-                        src={client.avatar}
-                        alt={client.name}
-                        fill
-                        className="object-cover"
-                      />
+        {currentClients.length > 0 ? (
+          <>
+            <div className="divide-y divide-gray-100">
+              {currentClients.map((client, index) => (
+                <motion.div
+                  key={client.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  className="p-4 hover:bg-gray-50"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center">
+                      <div className="relative h-12 w-12 rounded-full overflow-hidden mr-4">
+                        <Image
+                          src={client.avatar}
+                          alt={client.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div>
+                        <Link href={`/account/trainer/clients/${client.id}`} className="font-medium text-lg hover:text-primary">
+                          {client.name}
+                        </Link>
+                        <div className="flex flex-col xs:flex-row xs:items-center gap-1 xs:gap-2 text-sm text-gray-500">
+                          <span>{client.email}</span>
+                          <span className="hidden xs:inline-block">•</span>
+                          <span>{client.phone}</span>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <Link href={`/account/trainer/clients/${client.id}`} className="font-medium text-lg hover:text-primary">
-                        {client.name}
-                      </Link>
-                      <div className="flex flex-col xs:flex-row xs:items-center gap-1 xs:gap-2 text-sm text-gray-500">
-                        <span>{client.email}</span>
-                        <span className="hidden xs:inline-block">•</span>
-                        <span>{client.phone}</span>
+                    
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 mt-2 sm:mt-0">
+                      <span className={`px-3 py-1 rounded-full text-xs ${getStatusColor(client.status)}`}>
+                        {client.status === 'active' ? 'Hoạt động' : 
+                         client.status === 'inactive' ? 'Không hoạt động' : 'Chờ xác nhận'}
+                      </span>
+                      <div className="flex space-x-4">
+                        <Link 
+                          href={`/account/trainer/clients/${client.id}/progress`}
+                          className="flex items-center text-gray-500 hover:text-primary text-sm"
+                        >
+                          <RiFileChartLine className="mr-1" />
+                          <span>Tiến độ</span>
+                        </Link>
+                        <Link 
+                          href={`/account/trainer/clients/${client.id}/schedule`}
+                          className="flex items-center text-gray-500 hover:text-primary text-sm"
+                        >
+                          <RiCalendarLine className="mr-1" />
+                          <span>Lịch tập</span>
+                        </Link>
                       </div>
                     </div>
                   </div>
                   
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 mt-2 sm:mt-0">
-                    <span className={`px-3 py-1 rounded-full text-xs ${getStatusColor(client.status)}`}>
-                      {client.status === 'active' ? 'Hoạt động' : 
-                       client.status === 'inactive' ? 'Không hoạt động' : 'Chờ xác nhận'}
-                    </span>
-                    <div className="flex space-x-4">
-                      <Link 
-                        href={`/account/trainer/clients/${client.id}/progress`}
-                        className="flex items-center text-gray-500 hover:text-primary text-sm"
-                      >
-                        <RiFileChartLine className="mr-1" />
-                        <span>Tiến độ</span>
-                      </Link>
-                      <Link 
-                        href={`/account/trainer/clients/${client.id}/schedule`}
-                        className="flex items-center text-gray-500 hover:text-primary text-sm"
-                      >
-                        <RiCalendarLine className="mr-1" />
-                        <span>Lịch tập</span>
-                      </Link>
+                  <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    <div className="px-3 py-2 bg-gray-50 rounded text-sm">
+                      <span className="text-gray-500">Buổi đã hoàn thành:</span>
+                      <span className="font-medium ml-2">{client.completedSessions}</span>
+                    </div>
+                    <div className="px-3 py-2 bg-gray-50 rounded text-sm">
+                      <span className="text-gray-500">Buổi sắp tới:</span>
+                      <span className="font-medium ml-2">{client.upcomingSessions}</span>
+                    </div>
+                    <div className="px-3 py-2 bg-gray-50 rounded text-sm">
+                      <span className="text-gray-500">Buổi tập gần nhất:</span>
+                      <span className="font-medium ml-2">{client.lastSession || 'Chưa có'}</span>
                     </div>
                   </div>
+                  
+                  <div className="mt-2">
+                    <span className="text-xs text-gray-500">Mục tiêu:</span>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {client.goals.map((goal, i) => (
+                        <span key={i} className="px-2 py-1 bg-blue-50 text-blue-600 rounded text-xs">
+                          {goal}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="p-4 border-t border-gray-100 flex items-center justify-between">
+                <div className="text-sm text-gray-700">
+                  Hiển thị {indexOfFirstClient + 1} đến {Math.min(indexOfLastClient, filteredClients.length)} của {filteredClients.length} học viên
                 </div>
-                
-                <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  <div className="px-3 py-2 bg-gray-50 rounded text-sm">
-                    <span className="text-gray-500">Buổi đã hoàn thành:</span>
-                    <span className="font-medium ml-2">{client.completedSessions}</span>
-                  </div>
-                  <div className="px-3 py-2 bg-gray-50 rounded text-sm">
-                    <span className="text-gray-500">Buổi sắp tới:</span>
-                    <span className="font-medium ml-2">{client.upcomingSessions}</span>
-                  </div>
-                  <div className="px-3 py-2 bg-gray-50 rounded text-sm">
-                    <span className="text-gray-500">Buổi tập gần nhất:</span>
-                    <span className="font-medium ml-2">{client.lastSession || 'Chưa có'}</span>
-                  </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="flex items-center justify-center w-8 h-8 rounded-full border text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-white transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+
+                  {[...Array(totalPages)].map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(i + 1)}
+                      className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                        currentPage === i + 1
+                          ? "bg-primary text-white"
+                          : "border text-gray-700 hover:bg-gray-100"
+                      } transition-colors`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="flex items-center justify-center w-8 h-8 rounded-full border text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-white transition-colors"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </button>
                 </div>
-                
-                <div className="mt-2">
-                  <span className="text-xs text-gray-500">Mục tiêu:</span>
-                  <div className="flex flex-wrap gap-2 mt-1">
-                    {client.goals.map((goal, i) => (
-                      <span key={i} className="px-2 py-1 bg-blue-50 text-blue-600 rounded text-xs">
-                        {goal}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            )}
+          </>
         ) : (
           <div className="py-8 text-center">
             <p className="text-gray-500">Không tìm thấy học viên nào phù hợp với tìm kiếm của bạn.</p>

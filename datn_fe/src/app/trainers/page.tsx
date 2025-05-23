@@ -9,12 +9,31 @@ import { useState } from 'react';
 
 const TrainersPage = () => {
   const [filter, setFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const trainersPerPage = 9; // 3x3 grid
   
   // Lọc trainer theo chuyên môn
   const filteredTrainers = filter === 'all' 
     ? trainers 
     : trainers.filter(trainer => trainer.specialization.toLowerCase().includes(filter));
-  
+
+  // Tính toán số trang
+  const totalPages = Math.ceil(filteredTrainers.length / trainersPerPage);
+
+  // Lấy danh sách trainer cho trang hiện tại
+  const indexOfLastTrainer = currentPage * trainersPerPage;
+  const indexOfFirstTrainer = indexOfLastTrainer - trainersPerPage;
+  const currentTrainers = filteredTrainers.slice(indexOfFirstTrainer, indexOfLastTrainer);
+
+  // Reset về trang 1 khi thay đổi bộ lọc
+  const handleFilterChange = (newFilter: string) => {
+    setFilter(newFilter);
+    setCurrentPage(1);
+  };
+
+  // Tạo mảng các số trang
+  const paginationItems = Array.from({ length: totalPages }, (_, i) => i + 1);
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -34,31 +53,31 @@ const TrainersPage = () => {
             {/* Filter options */}
             <div className="flex flex-wrap justify-center gap-4 mb-10">
               <button 
-                onClick={() => setFilter('all')}
+                onClick={() => handleFilterChange('all')}
                 className={`px-4 py-2 rounded-full ${filter === 'all' ? 'bg-primary text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
               >
                 Tất cả
               </button>
               <button 
-                onClick={() => setFilter('tăng cơ')}
+                onClick={() => handleFilterChange('tăng cơ')}
                 className={`px-4 py-2 rounded-full ${filter === 'tăng cơ' ? 'bg-primary text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
               >
                 Tăng cơ
               </button>
               <button 
-                onClick={() => setFilter('yoga')}
+                onClick={() => handleFilterChange('yoga')}
                 className={`px-4 py-2 rounded-full ${filter === 'yoga' ? 'bg-primary text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
               >
                 Yoga
               </button>
               <button 
-                onClick={() => setFilter('phục hồi')}
+                onClick={() => handleFilterChange('phục hồi')}
                 className={`px-4 py-2 rounded-full ${filter === 'phục hồi' ? 'bg-primary text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
               >
                 Phục hồi chức năng
               </button>
               <button 
-                onClick={() => setFilter('đốt mỡ')}
+                onClick={() => handleFilterChange('đốt mỡ')}
                 className={`px-4 py-2 rounded-full ${filter === 'đốt mỡ' ? 'bg-primary text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
               >
                 Đốt mỡ & Cardio
@@ -68,7 +87,7 @@ const TrainersPage = () => {
           
           {/* Trainers grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredTrainers.map(trainer => (
+            {currentTrainers.map(trainer => (
               <div key={trainer.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 <div className="relative h-80">
                   <Image 
@@ -103,6 +122,45 @@ const TrainersPage = () => {
               </div>
             ))}
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-12 flex justify-center items-center gap-2">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="flex items-center justify-center w-10 h-10 rounded-full border text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-white transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </button>
+
+              {paginationItems.map(number => (
+                <button
+                  key={number}
+                  onClick={() => setCurrentPage(number)}
+                  className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                    currentPage === number
+                      ? "bg-primary text-white"
+                      : "border text-gray-700 hover:bg-gray-100"
+                  } transition-colors`}
+                >
+                  {number}
+                </button>
+              ))}
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="flex items-center justify-center w-10 h-10 rounded-full border text-gray-500 hover:bg-gray-100 disabled:opacity-50 disabled:hover:bg-white transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          )}
           
           {filteredTrainers.length === 0 && (
             <div className="text-center py-10">
